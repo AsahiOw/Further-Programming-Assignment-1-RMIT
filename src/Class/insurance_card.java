@@ -1,12 +1,14 @@
 package Class;
 
 import java.util.Date;
+import java.util.List;
 
 public class insurance_card {
     private int id;
     private customer customer;
     private policy_holder policyOwner;
     private Date expirationDate;
+    private static List<insurance_card> insuranceCards;
 
     public insurance_card(int id, customer customer, policy_holder policyOwner, Date expirationDate) {
         this.id = id;
@@ -46,5 +48,24 @@ public class insurance_card {
 
     public void setExpirationDate(Date expirationDate) {
         this.expirationDate = expirationDate;
+    }
+
+    public List<insurance_card> getInsuranceCards() {
+        return insuranceCards;
+    }
+
+    public void setInsuranceCards(List<insurance_card> insuranceCards) {
+        this.insuranceCards = insuranceCards;
+    }
+
+    // method section
+    // get insurance card by id
+    public static insurance_card getInsuranceCardById(int id){
+        for (insurance_card insuranceCard : insuranceCards) {
+            if(insuranceCard.getId() == id){
+                return insuranceCard;
+            }
+        }
+        return null;
     }
 }
