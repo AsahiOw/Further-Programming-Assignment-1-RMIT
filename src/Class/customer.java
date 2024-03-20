@@ -4,20 +4,19 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import Class.*;
 
 public abstract class customer {
     private static int lastAssignedId = readLastAssignedId();
     private String id;
     private String fullName;
     private insurance_card insuranceCard;
-    private List<claim> claims;
+    private List<claim> claim;
 
-    public customer(String id,String fullName, insurance_card insuranceCard, List<claim> claims) {
+    public customer(String id,String fullName, insurance_card insuranceCard, List<claim> claim) {
         this.id = id;
         this.fullName = fullName;
         this.insuranceCard = insuranceCard;
-        this.claims = claims;
+        this.claim = claim;
     }
 
     // getters and setters
@@ -41,11 +40,11 @@ public abstract class customer {
     }
 
     public List<claim> getClaims() {
-        return claims;
+        return claim;
     }
 
     public void setClaims(List<claim> claims) {
-        this.claims = claims;
+        this.claim = claims;
     }
 
     // method section
@@ -53,7 +52,7 @@ public abstract class customer {
     //    This is the method that reads the last assigned id from the file lastAssignedCustomerId.txt. If the file does not exist, it returns 0.
     private static int readLastAssignedId() {
         try {
-            File file = new File("Id_folder/lastAssignedCustomerId.txt");
+            File file = new File("src/Id_folder/lastAssignedCustomerId.txt");
             if (!file.exists()) {
                 file.createNewFile();
             }
@@ -62,40 +61,27 @@ public abstract class customer {
             reader.close();
             return line != null ? Integer.parseInt(line) : 0;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            return 0;
         }
     }
     private static void writeLastAssignedId() {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("Id_folder/lastAssignedCustomerId.txt"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("src/Id_folder/lastAssignedCustomerId.txt"));
             writer.write(String.valueOf(lastAssignedId));
             writer.close();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
-    private String generateId() {
+    private static String generateId() {
         lastAssignedId++;
         writeLastAssignedId();
         return String.format("C-%07d", lastAssignedId);
     }
-    //    get customer by id
-    public static customer getCustomerById(String id) {
-        for (policy_holder policyHolder : policy_holder.getPolicyHolders()) {
-            if (policyHolder.getId().equals(id)) {
-                return policyHolder;
-            }
-        }
-        for (dependent dependent : dependent.getDependents()) {
-            if (dependent.getId().equals(id)) {
-                return dependent;
-            }
-        }
-        return null;
-    }
 
     // customer CRUD
-    public void create_customer(Scanner scanner){
+    public static void create_customer(Scanner scanner){
         String fullName = "";
         insurance_card insuranceCard = null;
         while (true) {
@@ -139,7 +125,7 @@ public abstract class customer {
             }
         }
     }
-    public void read_all_customers(){
+    public static void read_all_customers(){
         for (policy_holder policyHolder : policy_holder.getPolicyHolders()) {
             System.out.println("ALL Policy holders");
             System.out.println(policyHolder);
@@ -149,8 +135,10 @@ public abstract class customer {
             System.out.println(dependent);
         }
     };
+
     // abstract methods
     public abstract void delete_customer(Scanner scanner);
     public abstract void update_customer(Scanner scanner);
     public abstract void read_customer(Scanner scanner);
+
 }

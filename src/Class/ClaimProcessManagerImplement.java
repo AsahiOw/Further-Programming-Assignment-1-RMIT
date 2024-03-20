@@ -25,11 +25,11 @@ public class ClaimProcessManagerImplement implements ClaimProcessManager{
             }
         }
 
-        customer insuredPerson = null;
+        allCustomer insuredPerson = null;
         while (insuredPerson == null) {
             System.out.println("Enter the ID of the insured person: ");
             String insuredPersonId = scanner.nextLine();
-            insuredPerson = customer.getCustomerById(insuredPersonId);
+            insuredPerson = allCustomer.getCustomerById(insuredPersonId);
             if (insuredPerson == null) {
                 System.out.println("No customer found with the provided ID. Please try again.");
             }
@@ -104,7 +104,7 @@ public class ClaimProcessManagerImplement implements ClaimProcessManager{
         System.out.println("Enter the new ID of the insured person, (or press Enter to skip): ");
         String insuredPersonId = scanner.nextLine();
         if (!insuredPersonId.isEmpty()) {
-            customer insuredPerson = customer.getCustomerById(insuredPersonId);
+            allCustomer insuredPerson = allCustomer.getCustomerById(insuredPersonId);
             if (insuredPerson != null) {
                 existingClaim.setInsuredPerson(insuredPerson);
             } else {

@@ -103,4 +103,14 @@ public class policy_holder extends customer{
         }
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+                "id='" + getId() + '\'' +
+                ", fullName='" + getFullName() + '\'' +
+                ", insuranceCard=" + getInsuranceCard() +
+                ", claim=" + getClaims() +
+                ", dependents=" + dependents +
+                '}';
+    }
 }

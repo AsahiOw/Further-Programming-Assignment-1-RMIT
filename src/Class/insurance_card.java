@@ -1,6 +1,7 @@
 package Class;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -8,12 +9,13 @@ import java.util.Scanner;
 public class insurance_card {
     private static int lastAssignedId = readLastAssignedId();
     private int id;
-    private customer customer;
+    private static allCustomer customer;
     private policy_holder policyOwner;
     private Date expirationDate;
     private static List<insurance_card> insuranceCards;
+    private claim claims;
 
-    public insurance_card(int id, customer customer, policy_holder policyOwner, Date expirationDate) {
+    public insurance_card(int id, allCustomer customer, policy_holder policyOwner, Date expirationDate) {
         this.id = id;
         this.customer = customer;
         this.policyOwner = policyOwner;
@@ -29,11 +31,11 @@ public class insurance_card {
         this.id = id;
     }
 
-    public customer getCustomer() {
+    public allCustomer getCustomer() {
         return customer;
     }
 
-    public void setCustomer(customer customer) {
+    public void setCustomer(allCustomer customer) {
         this.customer = customer;
     }
 
@@ -53,7 +55,10 @@ public class insurance_card {
         this.expirationDate = expirationDate;
     }
 
-    public List<insurance_card> getInsuranceCards() {
+    public static List<insurance_card> getInsuranceCards() {
+        if (insuranceCards == null) {
+            insuranceCards = new ArrayList<>();
+        }
         return insuranceCards;
     }
 
@@ -61,11 +66,18 @@ public class insurance_card {
         insurance_card.insuranceCards = insuranceCards;
     }
 
+    public void setClaim(claim claims) {
+        this.claims = claims;
+    }
+    public claim getClaim() {
+        return this.claims;
+    }
+
     // method section
     //    This is the method that reads the last assigned id from the file lastAssignedInsuranceId.txt. If the file does not exist, it returns 0.
     private static int readLastAssignedId() {
         try {
-            File file = new File("Id_folder/lastAssignedInsuranceId.txt");
+            File file = new File("src/Id_folder/lastAssignedInsuranceId.txt");
             if (!file.exists()) {
                 file.createNewFile();
             }
@@ -79,7 +91,7 @@ public class insurance_card {
     }
     private static void writeLastAssignedId() {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("Id_folder/lastAssignedInsuranceId.txt"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("src/Id_folder/lastAssignedInsuranceId.txt"));
             writer.write(String.valueOf(lastAssignedId));
             writer.close();
         } catch (IOException e) {
@@ -101,8 +113,8 @@ public class insurance_card {
         return null;
     }
     //    CRUD for insurance card
-    public void create_insurance_card(Scanner scanner){
-        customer Customer = null;
+    public static void create_insurance_card(Scanner scanner){
+        allCustomer Customer = null;
         while (Customer == null) {
             System.out.print("Enter the customer's ID: ");
             String customerID = scanner.nextLine();
@@ -136,7 +148,7 @@ public class insurance_card {
         int id = generateId();
         insurance_card new_card = new insurance_card(id, Customer, policyHolder, expirationDate);
     }
-    public void delete_insurance_card(Scanner scanner){
+    public static void delete_insurance_card(Scanner scanner){
         System.out.println("Enter the id of the insurance card you want to delete");
         int id = scanner.nextInt();
         insurance_card insuranceCard = getInsuranceCardById(id);
@@ -151,7 +163,7 @@ public class insurance_card {
             System.out.println("The insurance card does not exist");
         }
     }
-    public void update_insurance_card(Scanner scanner){
+    public static void update_insurance_card(Scanner scanner){
         System.out.println("Enter the ID of the insurance card you want to update: ");
         int id = scanner.nextInt();
         insurance_card insuranceCard = getInsuranceCardById(id);
@@ -159,7 +171,7 @@ public class insurance_card {
             System.out.println("Enter the new customer ID of the insurance card (or press Enter to skip): ");
             String customerIDInput = scanner.nextLine();
             if (!customerIDInput.isEmpty()) {
-                customer Customer = customer.getCustomerById(customerIDInput);
+                allCustomer Customer = allCustomer.getCustomerById(customerIDInput);
                 if (Customer != null) {
                     insuranceCard.setCustomer(Customer);
                 } else {
@@ -192,7 +204,7 @@ public class insurance_card {
             System.out.println("The insurance card does not exist");
         }
     }
-    public void read_insurance_card(Scanner scanner){
+    public static void read_insurance_card(Scanner scanner){
         System.out.println("Enter the ID of the insurance card you want to view: ");
         int id = scanner.nextInt();
         insurance_card insuranceCard = getInsuranceCardById(id);
@@ -204,5 +216,15 @@ public class insurance_card {
         } else {
             System.out.println("The insurance card does not exist");
         }
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + id +
+                ", policyOwner=" + policyOwner +
+                ", expirationDate=" + expirationDate +
+                ", claims=" + claims +
+                '}';
     }
 }

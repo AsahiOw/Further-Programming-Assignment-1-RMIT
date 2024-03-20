@@ -123,4 +123,14 @@ public class dependent extends customer{
         }
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+                "id='" + getId() + '\'' +
+                ", fullName='" + getFullName() + '\'' +
+                ", insuranceCard=" + getInsuranceCard() +
+                ", claim=" + getClaims() +
+                ", policyHolder=" + policyHolder +
+                '}';
+    }
 }

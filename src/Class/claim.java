@@ -9,7 +9,7 @@ public class claim {
     private static int lastAssignedId = readLastAssignedId();
     private String id;
     private Date ClaimDate;
-    private customer insuredPerson;
+    private allCustomer insuredPerson;
     private insurance_card insuranceCard;
     private Date examDate;
     private List<String> documents;
@@ -18,7 +18,7 @@ public class claim {
     private String BankingInfo;
     private static List<claim> claims = new ArrayList<>();
 
-    public claim(String id, Date claimDate, customer insuredPerson, insurance_card insuranceCard, Date examDate, List<String> documents, double claimAmount, allStatus status, String bankingInfo) {
+    public claim(String id, Date claimDate, allCustomer insuredPerson, insurance_card insuranceCard, Date examDate, List<String> documents, double claimAmount, allStatus status, String bankingInfo) {
         this.id = id;
         ClaimDate = claimDate;
         this.insuredPerson = insuredPerson;
@@ -49,11 +49,11 @@ public class claim {
         ClaimDate = claimDate;
     }
 
-    public customer getInsuredPerson() {
+    public allCustomer getInsuredPerson() {
         return insuredPerson;
     }
 
-    public void setInsuredPerson(customer insuredPerson) {
+    public void setInsuredPerson(allCustomer insuredPerson) {
         this.insuredPerson = insuredPerson;
     }
 
@@ -122,7 +122,7 @@ public class claim {
     //    This is the method that reads the last assigned id from the file lastAssignedClaimId.txt. If the file does not exist, it returns 0.
     private static int readLastAssignedId() {
         try {
-            File file = new File("Id_folder/lastAssignedClaimId.txt");
+            File file = new File("src/Id_folder/lastAssignedClaimId.txt");
             if (!file.exists()) {
                 file.createNewFile();
             }
@@ -136,7 +136,7 @@ public class claim {
     }
     private static void writeLastAssignedId() {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("Id_folder/lastAssignedClaimId.txt"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("src/Id_folder/lastAssignedClaimId.txt"));
             writer.write(String.valueOf(lastAssignedId));
             writer.close();
         } catch (IOException e) {
@@ -149,4 +149,18 @@ public class claim {
         return String.format("f-%10d", lastAssignedId);
     }
 
+    @Override
+    public String toString() {
+        return  "{" +
+                "id='" + id + '\'' +
+                ", ClaimDate=" + ClaimDate +
+                ", insuredPerson=" + insuredPerson +
+                ", insuranceCard=" + insuranceCard +
+                ", examDate=" + examDate +
+                ", documents=" + documents +
+                ", claimAmount=" + claimAmount +
+                ", status=" + status +
+                ", BankingInfo='" + BankingInfo + '\'' +
+                '}';
+    }
 }
