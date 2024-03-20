@@ -24,6 +24,7 @@ public class policy_holder extends customer{
     }
 
     // method section
+    //    get policy holder by id
     public static policy_holder getPolicyHolderById(String id) {
         for (policy_holder policyHolder : policyHolders) {
             if (policyHolder.getId().equals(id)) {
@@ -32,11 +33,11 @@ public class policy_holder extends customer{
         }
         return null;
     }
-
+    //    list of all policy holders
     public static List<policy_holder> getPolicyHolders() {
         return policyHolders;
     }
-
+    //    RUD overriden methods for policyholder
     @Override
     public void delete_customer(Scanner scanner) {
         System.out.println("Enter the id of the dependent you want to delete");

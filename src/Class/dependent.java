@@ -11,6 +11,7 @@ public class dependent extends customer{
     public dependent(String id, String fullName, insurance_card insuranceCard, List<claim> claims, policy_holder policyHolder) {
         super(id, fullName, insuranceCard, claims);
         this.policyHolder = policyHolder;
+        Dependents.add(this);
     }
 
     //getters and setters
@@ -22,7 +23,7 @@ public class dependent extends customer{
     }
 
     // method section
-
+    //    get dependent by id
     public static dependent getDependentById(String id) {
         for (dependent dependent : Dependents) {
             if (dependent.getId().equals(id)) {
@@ -31,10 +32,11 @@ public class dependent extends customer{
         }
         return null;
     }
-
+    //    list of all dependent
     public static List<dependent> getDependents() {
         return Dependents;
     }
+    //    RUD overriden methods for dependent
     @Override
     public void delete_customer(Scanner scanner) {
         System.out.println("Enter the id of the dependent you want to delete");

@@ -50,7 +50,7 @@ public abstract class customer {
 
     // method section
 
-    //    This is the method that reads the last assigned id from the file lastAssignedId.txt. If the file does not exist, it returns 0.
+    //    This is the method that reads the last assigned id from the file lastAssignedCustomerId.txt. If the file does not exist, it returns 0.
     private static int readLastAssignedId() {
         try {
             File file = new File("Id_folder/lastAssignedCustomerId.txt");
@@ -78,6 +78,20 @@ public abstract class customer {
         lastAssignedId++;
         writeLastAssignedId();
         return String.format("C-%07d", lastAssignedId);
+    }
+    //    get customer by id
+    public static customer getCustomerById(String id) {
+        for (policy_holder policyHolder : policy_holder.getPolicyHolders()) {
+            if (policyHolder.getId().equals(id)) {
+                return policyHolder;
+            }
+        }
+        for (dependent dependent : dependent.getDependents()) {
+            if (dependent.getId().equals(id)) {
+                return dependent;
+            }
+        }
+        return null;
     }
 
     // customer CRUD
