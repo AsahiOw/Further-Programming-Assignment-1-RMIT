@@ -9,16 +9,15 @@ public class claim {
     private static int lastAssignedId = readLastAssignedId();
     private String id;
     private Date ClaimDate;
-    private allCustomer insuredPerson;
-    private insurance_card insuranceCard;
+    private String insuredPerson;
+    private int insuranceCard;
     private Date examDate;
     private List<String> documents;
     private double claimAmount;
     private allStatus status;
     private String BankingInfo;
-    private static List<claim> claims = new ArrayList<>();
 
-    public claim(String id, Date claimDate, allCustomer insuredPerson, insurance_card insuranceCard, Date examDate, List<String> documents, double claimAmount, allStatus status, String bankingInfo) {
+    public claim(String id, Date claimDate, String insuredPerson, int insuranceCard, Date examDate, List<String> documents, double claimAmount, allStatus status, String bankingInfo) {
         this.id = id;
         ClaimDate = claimDate;
         this.insuredPerson = insuredPerson;
@@ -28,10 +27,16 @@ public class claim {
         this.claimAmount = claimAmount;
         this.status = status;
         BankingInfo = bankingInfo;
-        claims.add(this);
     }
 
     //getters and setters
+    public static int getLastAssignedId() {
+        return lastAssignedId;
+    }
+
+    public static void setLastAssignedId(int lastAssignedId) {
+        claim.lastAssignedId = lastAssignedId;
+    }
 
     public String getId() {
         return id;
@@ -49,19 +54,19 @@ public class claim {
         ClaimDate = claimDate;
     }
 
-    public allCustomer getInsuredPerson() {
+    public String getInsuredPerson() {
         return insuredPerson;
     }
 
-    public void setInsuredPerson(allCustomer insuredPerson) {
+    public void setInsuredPerson(String insuredPerson) {
         this.insuredPerson = insuredPerson;
     }
 
-    public insurance_card getInsuranceCard() {
+    public int getInsuranceCard() {
         return insuranceCard;
     }
 
-    public void setInsuranceCard(insurance_card insuranceCard) {
+    public void setInsuranceCard(int insuranceCard) {
         this.insuranceCard = insuranceCard;
     }
 
@@ -103,10 +108,6 @@ public class claim {
 
     public void setBankingInfo(String bankingInfo) {
         BankingInfo = bankingInfo;
-    }
-
-    public static List<claim> getClaims() {
-        return claims;
     }
 
     // method section
