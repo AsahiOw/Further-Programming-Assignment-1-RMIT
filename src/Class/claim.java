@@ -9,8 +9,8 @@ public class claim {
     private static int lastAssignedId = readLastAssignedId();
     private String id;
     private Date ClaimDate;
-    private allCustomer insuredPerson;
-    private insurance_card insuranceCard;
+    private String insuredPerson;
+    private int insuranceCard;
     private Date examDate;
     private List<String> documents;
     private double claimAmount;

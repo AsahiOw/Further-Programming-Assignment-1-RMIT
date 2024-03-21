@@ -9,10 +9,10 @@ public abstract class customer {
     private static int lastAssignedId = readLastAssignedId();
     private String id;
     private String fullName;
-    private insurance_card insuranceCard;
-    private List<claim> claim;
+    private int insuranceCard;
+    private List<String> claim;
 
-    public customer(String id,String fullName, insurance_card insuranceCard, List<claim> claim) {
+    public customer(String id,String fullName, int insuranceCard, List<String> claim) {
         this.id = id;
         this.fullName = fullName;
         this.insuranceCard = insuranceCard;
@@ -31,20 +31,20 @@ public abstract class customer {
         this.fullName = fullName;
     }
 
-    public insurance_card getInsuranceCard() {
+    public int getInsuranceCard() {
         return insuranceCard;
     }
 
-    public void setInsuranceCard(insurance_card insuranceCard) {
+    public void setInsuranceCard(int insuranceCard) {
         this.insuranceCard = insuranceCard;
     }
 
-    public List<claim> getClaims() {
+    public List<String> getClaim() {
         return claim;
     }
 
-    public void setClaims(List<claim> claims) {
-        this.claim = claims;
+    public void setClaim(List<String> claim) {
+        this.claim = claim;
     }
 
     // method section

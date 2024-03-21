@@ -13,6 +13,10 @@ public class allCustomer extends customer{
         super(id, fullName, insuranceCard, claims);
         this.policyHolder = policyHolder;
         this.dependent = dependent;
+        if (Customers == null) {
+            Customers = new ArrayList<>();
+        }
+        Customers.add(this);
     }
 
     // getters and setters for policyHolder and dependent

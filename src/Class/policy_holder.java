@@ -6,20 +6,20 @@ import java.util.Scanner;
 import static Class.dependent.getDependentById;
 
 public class policy_holder extends customer{
-    private List<dependent> dependents;
+    private List<String> dependents;
     private static List<policy_holder> policyHolders = new ArrayList<>();
 
-    public policy_holder(String id, String fullName, insurance_card insuranceCard, List<claim> claims, List<dependent> dependents) {
+    public policy_holder(String id, String fullName, int insuranceCard, List<String> claims, List<String> dependents) {
         super(id, fullName, insuranceCard, claims);
         this.dependents = dependents;
         policyHolders.add(this);
     }
 
     //getters and setters
-    public List<dependent> getDependents() {
+    public List<String> getDependents() {
         return dependents;
     }
-    public void setDependents(List<dependent> dependents) {
+    public void setDependents(List<String> dependents) {
         this.dependents = dependents;
     }
 
@@ -34,7 +34,7 @@ public class policy_holder extends customer{
         return null;
     }
     //    list of all policy holders
-    public static List<policy_holder> getPolicyHolders() {
+    public static List<String> getPolicyHolders() {
         return policyHolders;
     }
     //    RUD overriden methods for policyholder

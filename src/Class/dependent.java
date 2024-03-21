@@ -5,20 +5,20 @@ import java.util.List;
 import java.util.Scanner;
 
 public class dependent extends customer{
-    private policy_holder policyHolder;
+    private String policyHolder;
     private static List<dependent> Dependents = new ArrayList<>();
 
-    public dependent(String id, String fullName, insurance_card insuranceCard, List<claim> claims, policy_holder policyHolder) {
+    public dependent(String id, String fullName, int insuranceCard, List<String> claims, String policyHolder) {
         super(id, fullName, insuranceCard, claims);
         this.policyHolder = policyHolder;
         Dependents.add(this);
     }
 
     //getters and setters
-    public policy_holder getPolicyHolder() {
+    public String getPolicyHolder() {
         return policyHolder;
     }
-    public void setPolicyHolder(policy_holder policyHolder) {
+    public void setPolicyHolder(String policyHolder) {
         this.policyHolder = policyHolder;
     }
 

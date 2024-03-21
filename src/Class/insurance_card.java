@@ -9,13 +9,13 @@ import java.util.Scanner;
 public class insurance_card {
     private static int lastAssignedId = readLastAssignedId();
     private int id;
-    private static allCustomer customer;
-    private policy_holder policyOwner;
+    private static String customer;
+    private String policyOwner;
     private Date expirationDate;
     private static List<insurance_card> insuranceCards;
-    private claim claims;
+    private String claims;
 
-    public insurance_card(int id, allCustomer customer, policy_holder policyOwner, Date expirationDate) {
+    public insurance_card(int id, String customer, String policyOwner, Date expirationDate) {
         this.id = id;
         this.customer = customer;
         this.policyOwner = policyOwner;
@@ -31,19 +31,19 @@ public class insurance_card {
         this.id = id;
     }
 
-    public allCustomer getCustomer() {
+    public String getCustomer() {
         return customer;
     }
 
-    public void setCustomer(allCustomer customer) {
+    public void setCustomer(String customer) {
         this.customer = customer;
     }
 
-    public policy_holder getPolicyOwner() {
+    public String getPolicyOwner() {
         return policyOwner;
     }
 
-    public void setPolicyOwner(policy_holder policyOwner) {
+    public void setPolicyOwner(String policyOwner) {
         this.policyOwner = policyOwner;
     }
 
@@ -55,21 +55,18 @@ public class insurance_card {
         this.expirationDate = expirationDate;
     }
 
-    public static List<insurance_card> getInsuranceCards() {
+    public static List<String> getInsuranceCards() {
         if (insuranceCards == null) {
             insuranceCards = new ArrayList<>();
         }
         return insuranceCards;
     }
 
-    public void setInsuranceCards(List<insurance_card> insuranceCards) {
-        insurance_card.insuranceCards = insuranceCards;
-    }
 
-    public void setClaim(claim claims) {
+    public void setClaim(String claims) {
         this.claims = claims;
     }
-    public claim getClaim() {
+    public String getClaim() {
         return this.claims;
     }
 

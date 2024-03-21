@@ -230,6 +230,9 @@ public class Load_Save_Data {
         List<insurance_card> insuranceCards = insurance_card.getInsuranceCards();
         List<claim> claims = claim.getClaims();
         List<allCustomer> customers = allCustomer.getCustomers();
+        System.out.println("test" + insuranceCards);
+        System.out.println("test" + claims);
+        System.out.println("test" + customers);
         // Save insurance cards
         try (PrintWriter insuranceCardWriter = new PrintWriter(new File(insuranceCardFileName))) {
             for (insurance_card insuranceCard : insuranceCards) {
@@ -237,6 +240,7 @@ public class Load_Save_Data {
                     insuranceCardWriter.println(insuranceCard.getId() + "," + (insuranceCard.getCustomer() != null ? insuranceCard.getCustomer().getId() : "") + "," + (insuranceCard.getPolicyOwner() != null ? insuranceCard.getPolicyOwner().getId() : "") + "," + new SimpleDateFormat("yyyy-MM-dd").format(insuranceCard.getExpirationDate()));
                 }
             }
+            insuranceCardWriter.flush();
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred while trying to save insurance cards.");
             e.printStackTrace();
@@ -249,6 +253,7 @@ public class Load_Save_Data {
                     claimWriter.println(claim.getId() + "," + new SimpleDateFormat("yyyy-MM-dd").format(claim.getClaimDate()) + "," + (claim.getInsuredPerson() != null ? claim.getInsuredPerson().getId() : "") + "," + (claim.getInsuranceCard() != null ? claim.getInsuranceCard().getId() : "") + "," + new SimpleDateFormat("yyyy-MM-dd").format(claim.getExamDate()) + "," + String.join(";", claim.getDocuments()) + "," + claim.getClaimAmount() + "," + claim.getStatus().toString() + "," + claim.getBankingInfo());
                 }
             }
+            claimWriter.flush();
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred while trying to save claims.");
             e.printStackTrace();
@@ -268,6 +273,7 @@ public class Load_Save_Data {
                     }
                 }
             }
+            customerWriter.flush();
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred while trying to save customers.");
             e.printStackTrace();
