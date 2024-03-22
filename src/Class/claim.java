@@ -1,12 +1,12 @@
 package Class;
 
+import Interface.Id_generate;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import Enum.*;
-public class claim {
-    private static int lastAssignedId = readLastAssignedId();
+public class claim implements Id_generate {
     private String id;
     private Date ClaimDate;
     private String insuredPerson;
@@ -16,6 +16,8 @@ public class claim {
     private double claimAmount;
     private allStatus status;
     private String BankingInfo;
+    // Define Dependents as a list of dependent objects
+    public static List<claim> claims = new ArrayList<>();
 
     public claim(String id, Date claimDate, String insuredPerson, int insuranceCard, Date examDate, List<String> documents, double claimAmount, allStatus status, String bankingInfo) {
         this.id = id;
@@ -30,22 +32,9 @@ public class claim {
     }
 
     //getters and setters
-    public static int getLastAssignedId() {
-        return lastAssignedId;
-    }
-
-    public static void setLastAssignedId(int lastAssignedId) {
-        claim.lastAssignedId = lastAssignedId;
-    }
-
     public String getId() {
         return id;
     }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public Date getClaimDate() {
         return ClaimDate;
     }
@@ -111,6 +100,10 @@ public class claim {
     }
 
     // method section
+    // add claim
+    public static void addClaim(claim claim) {
+        claims.add(claim);
+    }
     // get Claim by id
     public static claim getClaimById(String id) {
         for (claim claim : claims) {
@@ -120,8 +113,13 @@ public class claim {
         }
         return null;
     }
+    // get all claims
+    public static List<claim> getClaims() {
+        return claims;
+    }
     //    This is the method that reads the last assigned id from the file lastAssignedClaimId.txt. If the file does not exist, it returns 0.
-    private static int readLastAssignedId() {
+    @Override
+    public int readLastAssignedId() {
         try {
             File file = new File("src/Id_folder/lastAssignedClaimId.txt");
             if (!file.exists()) {
@@ -135,7 +133,9 @@ public class claim {
             throw new RuntimeException(e);
         }
     }
-    private static void writeLastAssignedId() {
+    private int lastAssignedId = readLastAssignedId();
+    @Override
+    public void writeLastAssignedId() {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter("src/Id_folder/lastAssignedClaimId.txt"));
             writer.write(String.valueOf(lastAssignedId));
@@ -144,7 +144,8 @@ public class claim {
             throw new RuntimeException(e);
         }
     }
-    public static String generateId() {
+    @Override
+    public String generateId() {
         lastAssignedId++;
         writeLastAssignedId();
         return String.format("f-%10d", lastAssignedId);
@@ -163,5 +164,22 @@ public class claim {
                 ", status=" + status +
                 ", BankingInfo='" + BankingInfo + '\'' +
                 '}';
+    }
+    // fromString method
+    public static claim fromString(String line) {
+        String[] fields = line.split(",");
+        String id = fields[0];
+        Date ClaimDate = new Date(fields[1]);
+        String insuredPerson = fields[2];
+        int insuranceCard = Integer.parseInt(fields[3]);
+        Date examDate = new Date(fields[4]);
+        List<String> documents = new ArrayList<>();
+        for (String document : fields[5].split(";")) {
+            documents.add(document);
+        }
+        double claimAmount = Double.parseDouble(fields[6]);
+        allStatus status = allStatus.valueOf(fields[7]);
+        String BankingInfo = fields[8];
+        return new claim(id, ClaimDate, insuredPerson, insuranceCard, examDate, documents, claimAmount, status, BankingInfo);
     }
 }

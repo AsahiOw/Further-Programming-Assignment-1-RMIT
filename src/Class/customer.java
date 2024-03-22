@@ -1,8 +1,6 @@
 package Class;
 
 import Interface.Id_generate;
-
-import java.io.*;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,20 +19,8 @@ public abstract class customer implements Id_generate {
 
     // getters and setters
 
-    public static int getLastAssignedId() {
-        return lastAssignedId;
-    }
-
-    public static void setLastAssignedId(int lastAssignedId) {
-        customer.lastAssignedId = lastAssignedId;
-    }
-
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getFullName() {
@@ -72,7 +58,7 @@ public abstract class customer implements Id_generate {
             System.out.println("ALL Dependents");
             System.out.println(dependent);
         }
-    };
+    }
 
     // abstract methods
     public abstract void create_customer(Scanner scanner);

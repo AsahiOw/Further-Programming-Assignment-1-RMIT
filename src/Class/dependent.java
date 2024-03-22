@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class dependent extends customer implements Id_generate {
     private String policyHolder;
-    // Define Dependents as a list of policy_holder objects
+    // Define Dependents as a list of dependent objects
     public static List<dependent> Dependents = new ArrayList<>();
     public dependent(String id, String fullName, int insuranceCard, List<String> claims, String policyHolder) {
         super(id, fullName, insuranceCard, claims);
@@ -25,6 +25,10 @@ public class dependent extends customer implements Id_generate {
     }
 
     // method section
+    // add dependent
+    public static void addDependent(dependent dependent) {
+        Dependents.add(dependent);
+    }
     // get dependent by id
     public static dependent getDependentById(String id) {
         for (dependent dependent : Dependents) {
@@ -168,5 +172,23 @@ public class dependent extends customer implements Id_generate {
                 ", claim=" + getClaims() +
                 ", policyHolder=" + policyHolder +
                 '}';
+    }
+    // fromString method
+    public static dependent fromString(String line) {
+        String[] parts = line.split(",");
+        String id = parts[0];
+        String fullName = parts[1];
+        int insuranceCard = Integer.parseInt(parts[2]);
+        List<String> claims = new ArrayList<>();
+        if (!parts[3].equals("null")) {
+            String[] claimsArray = parts[3].split(";");
+            for (String claim : claimsArray) {
+                claims.add(claim);
+            }
+        }
+        String policyHolder = parts[4];
+        dependent newDependent = new dependent(id, fullName, insuranceCard, claims, policyHolder);
+        Dependents.add(newDependent);
+        return newDependent;
     }
 }

@@ -3,80 +3,52 @@ import Interface.ClaimProcessManager;
 import Enum.allStatus;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Date;
+import java.util.*;
+
+import static Class.claim.claims;
 
 public class ClaimProcessManagerImplement implements ClaimProcessManager{
     //    CRUD for claim
     @Override
     public void add(Scanner scanner) throws ParseException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        dateFormat.setLenient(false);
-        Date claimDate = null;
-        while (claimDate == null) {
-            System.out.println("Enter the claim date (in format yyyy-MM-dd): ");
-            String claimDateStr = scanner.nextLine();
-            try {
-                claimDate = dateFormat.parse(claimDateStr);
-            } catch (ParseException e) {
-                System.out.println("Invalid date format. Please try again.");
-            }
-        }
+        System.out.println("Enter the insured person's name: ");
+        String insuredPerson = scanner.nextLine();
 
-        allCustomer insuredPerson = null;
-        while (insuredPerson == null) {
-            System.out.println("Enter the ID of the insured person: ");
-            String insuredPersonId = scanner.nextLine();
-            insuredPerson = allCustomer.getCustomerById(insuredPersonId);
-            if (insuredPerson == null) {
-                System.out.println("No customer found with the provided ID. Please try again.");
-            }
-        }
+        System.out.println("Enter the insurance card number: ");
+        int insuranceCard = Integer.parseInt(scanner.nextLine());
 
-        insurance_card insuranceCard = null;
-        while (insuranceCard == null) {
-            System.out.println("Enter the insurance card ID: ");
-            int insuranceCardId = scanner.nextInt();
-            insuranceCard = insurance_card.getInsuranceCardById(insuranceCardId);
-            if (insuranceCard == null) {
-                System.out.println("No insurance card found with the provided ID. Please try again.");
-            }
-        }
-        System.out.println("Enter the exam date (in format yyyy-MM-dd): ");
-        String examDateStr = scanner.nextLine();
-        Date examDate = new SimpleDateFormat("yyyy-MM-dd").parse(examDateStr);
-        System.out.println("Enter the documents (separated by comma): ");
-        String documentsStr = scanner.nextLine();
-        List<String> documents = Arrays.asList(documentsStr.split(","));
+        System.out.println("Enter the claim date (in format yyyy-mm-dd): ");
+        String claimDateInput = scanner.nextLine();
+        Date claimDate = new SimpleDateFormat("yyyy-MM-dd").parse(claimDateInput);
+
+        System.out.println("Enter the exam date (in format yyyy-mm-dd): ");
+        String examDateInput = scanner.nextLine();
+        Date examDate = new SimpleDateFormat("yyyy-MM-dd").parse(examDateInput);
+
         System.out.println("Enter the claim amount: ");
-        double claimAmount = scanner.nextDouble();
-        allStatus status = null;
-        while (status == null) {
-            System.out.println("Enter the status (1 for New, 2 for Processing, 3 for Done): ");
-            int statusInt = scanner.nextInt();
-            switch (statusInt) {
-                case 1:
-                    status = allStatus.New;
-                    break;
-                case 2:
-                    status = allStatus.Processing;
-                    break;
-                case 3:
-                    status = allStatus.Done;
-                    break;
-                default:
-                    System.out.println("Invalid status. Please enter 1 for APPROVED, 2 for REJECTED, or 3 for PENDING.");
-                    break;
-            }
-        }
+        double claimAmount = Double.parseDouble(scanner.nextLine());
+
+        System.out.println("Enter the status of the claim: ");
+        allStatus status = allStatus.valueOf(scanner.nextLine().toUpperCase());
+
         System.out.println("Enter the banking info: ");
         String bankingInfo = scanner.nextLine();
-        String id = claim.generateId();
+
+        System.out.println("Enter the documents related to the claim (separated by comma): ");
+        String documentsInput = scanner.nextLine();
+        List<String> documents = new ArrayList<>();
+        if (!documentsInput.isEmpty()) {
+            String[] documentsArray = documentsInput.split(",");
+            for (String document : documentsArray) {
+                documents.add(document.trim());
+            }
+        }
+        String id = null;
         claim newClaim = new claim(id, claimDate, insuredPerson, insuranceCard, examDate, documents, claimAmount, status, bankingInfo);
-        claim.getClaims().add(newClaim);
-        System.out.println("The claim has been added successfully");
+        id = newClaim.generateId();
+        claims.add(newClaim);
+
+        System.out.println("The claim has been created successfully with ID: " + id);
     }
 
     @Override
@@ -89,96 +61,85 @@ public class ClaimProcessManagerImplement implements ClaimProcessManager{
             return;
         }
 
-        System.out.println("Enter the new claim date (in format yyyy-MM-dd), (or press Enter to skip): ");
-        String claimDateStr = scanner.nextLine();
-        if (!claimDateStr.isEmpty()) {
-            Date claimDate = null;
-            try {
-                claimDate = new SimpleDateFormat("yyyy-MM-dd").parse(claimDateStr);
-                existingClaim.setClaimDate(claimDate);
-            } catch (ParseException e) {
-                System.out.println("Invalid date format. Please try again.");
+        System.out.println("Enter the new insured person's name (or press Enter to skip): ");
+        String insuredPerson = scanner.nextLine();
+        if (!insuredPerson.isEmpty()) {
+            existingClaim.setInsuredPerson(insuredPerson);
+        }
+
+        System.out.println("Enter the new insurance card number (or press Enter to skip): ");
+        String insuranceCardInput = scanner.nextLine();
+        if (!insuranceCardInput.isEmpty()) {
+            int insuranceCard = Integer.parseInt(insuranceCardInput);
+            existingClaim.setInsuranceCard(insuranceCard);
+        }
+
+        String claimDateInput;
+        Date claimDate = null;
+        do {
+            System.out.println("Enter the new claim date (in format yyyy-mm-dd) (or press Enter to skip): ");
+            claimDateInput = scanner.nextLine();
+            if (!claimDateInput.isEmpty()) {
+                try {
+                    claimDate = new SimpleDateFormat("yyyy-MM-dd").parse(claimDateInput);
+                } catch (ParseException e) {
+                    System.out.println("Invalid date format. Enter the new claim date (in format yyyy-mm-dd) (or press Enter to skip): ");
+                }
             }
+        } while (claimDate == null && !claimDateInput.isEmpty());
+        if (claimDate != null) {
+            existingClaim.setClaimDate(claimDate);
         }
 
-        System.out.println("Enter the new ID of the insured person, (or press Enter to skip): ");
-        String insuredPersonId = scanner.nextLine();
-        if (!insuredPersonId.isEmpty()) {
-            allCustomer insuredPerson = allCustomer.getCustomerById(insuredPersonId);
-            if (insuredPerson != null) {
-                existingClaim.setInsuredPerson(insuredPerson);
-            } else {
-                System.out.println("No customer found with the provided ID. Please try again.");
+        String examDateInput;
+        Date examDate = null;
+        do {
+            System.out.println("Enter the new exam date (in format yyyy-mm-dd) (or press Enter to skip): ");
+            examDateInput = scanner.nextLine();
+            if (!examDateInput.isEmpty()) {
+                try {
+                    examDate = new SimpleDateFormat("yyyy-MM-dd").parse(examDateInput);
+                } catch (ParseException e) {
+                    System.out.println("Invalid date format. Enter the new exam date (in format yyyy-mm-dd) (or press Enter to skip): ");
+                }
             }
+        } while (examDate == null && !examDateInput.isEmpty());
+        if (examDate != null) {
+            existingClaim.setExamDate(examDate);
         }
 
-        System.out.println("Enter the new insurance card ID, (or press Enter to skip): ");
-        String insuranceCardIdStr = scanner.nextLine();
-        if (!insuranceCardIdStr.isEmpty()) {
-            int insuranceCardId = Integer.parseInt(insuranceCardIdStr);
-            insurance_card insuranceCard = insurance_card.getInsuranceCardById(insuranceCardId);
-            if (insuranceCard != null) {
-                existingClaim.setInsuranceCard(insuranceCard);
-            } else {
-                System.out.println("No insurance card found with the provided ID. Please try again.");
-            }
-        }
-
-        System.out.println("Enter the new exam date (in format yyyy-MM-dd), (or press Enter to skip): ");
-        String examDateStr = scanner.nextLine();
-        if (!examDateStr.isEmpty()) {
-            Date examDate = null;
-            try {
-                examDate = new SimpleDateFormat("yyyy-MM-dd").parse(examDateStr);
-                existingClaim.setExamDate(examDate);
-            } catch (ParseException e) {
-                System.out.println("Invalid date format. Please try again.");
-            }
-        }
-
-        System.out.println("Enter the new documents (separated by comma), (or press Enter to skip): ");
-        String documentsStr = scanner.nextLine();
-        if (!documentsStr.isEmpty()) {
-            List<String> documents = Arrays.asList(documentsStr.split(","));
-            existingClaim.setDocuments(documents);
-        }
-
-        System.out.println("Enter the new claim amount, (or press Enter to skip): ");
-        String claimAmountStr = scanner.nextLine();
-        if (!claimAmountStr.isEmpty()) {
-            double claimAmount = Double.parseDouble(claimAmountStr);
+        System.out.println("Enter the new claim amount (or press Enter to skip): ");
+        String claimAmountInput = scanner.nextLine();
+        if (!claimAmountInput.isEmpty()) {
+            double claimAmount = Double.parseDouble(claimAmountInput);
             existingClaim.setClaimAmount(claimAmount);
         }
 
-        System.out.println("Enter the new status (1 for New, 2 for Processing, 3 for Done), (or press Enter to skip): ");
-        String statusStr = scanner.nextLine();
-        if (!statusStr.isEmpty()) {
-            int statusInt = Integer.parseInt(statusStr);
-            allStatus status = null;
-            switch (statusInt) {
-                case 1:
-                    status = allStatus.New;
-                    break;
-                case 2:
-                    status = allStatus.Processing;
-                    break;
-                case 3:
-                    status = allStatus.Done;
-                    break;
-                default:
-                    System.out.println("Invalid status. Please enter 1 for APPROVED, 2 for REJECTED, or 3 for PENDING.");
-                    return;
-            }
+        System.out.println("Enter the new status of the claim (or press Enter to skip): ");
+        String statusInput = scanner.nextLine();
+        if (!statusInput.isEmpty()) {
+            allStatus status = allStatus.valueOf(statusInput.toUpperCase());
             existingClaim.setStatus(status);
         }
 
-        System.out.println("Enter the new banking info, (or press Enter to skip): ");
+        System.out.println("Enter the new banking info (or press Enter to skip): ");
         String bankingInfo = scanner.nextLine();
         if (!bankingInfo.isEmpty()) {
             existingClaim.setBankingInfo(bankingInfo);
         }
 
-        System.out.println("The claim has been updated successfully");
+        System.out.println("Enter the new documents related to the claim (separated by comma) (or press Enter to skip): ");
+        String documentsInput = scanner.nextLine();
+        if (!documentsInput.isEmpty()) {
+            List<String> documents = new ArrayList<>();
+            String[] documentsArray = documentsInput.split(",");
+            for (String document : documentsArray) {
+                documents.add(document.trim());
+            }
+            existingClaim.setDocuments(documents);
+        }
+
+        System.out.println("The claim has been updated successfully.");
     }
 
     @Override
@@ -190,12 +151,17 @@ public class ClaimProcessManagerImplement implements ClaimProcessManager{
             System.out.println("No claim found with the provided ID.");
             return;
         }
-        // Remove the claim from the customer's list of claims
-        customer insuredPerson = existingClaim.getInsuredPerson();
-        insuredPerson.getClaims().remove(existingClaim);
-        // Remove the claim from the list of all claims
-        claim.getClaims().remove(existingClaim);
-        System.out.println("The claim has been deleted successfully");
+
+        // Remove the claim from all customers' claim lists
+        for (policy_holder policyHolder : policy_holder.getPolicyHolders()) {
+            policyHolder.getClaims().removeIf(claimId::equals);
+        }
+        for (dependent dependent : dependent.getDependents()) {
+            dependent.getClaims().removeIf(claimId::equals);
+        }
+
+        claims.remove(existingClaim);
+        System.out.println("The claim has been deleted successfully.");
     }
 
     @Override
@@ -212,6 +178,6 @@ public class ClaimProcessManagerImplement implements ClaimProcessManager{
 
     @Override
     public List<claim> getAll() {
-        return claim.getClaims();
+        return claims;
     }
 }

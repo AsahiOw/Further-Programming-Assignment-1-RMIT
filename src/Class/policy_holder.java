@@ -1,7 +1,6 @@
 package Class;
 
 import Interface.Id_generate;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +26,10 @@ public class policy_holder extends customer implements Id_generate {
     }
 
     // method section
+    // add policy holder
+    public static void addPolicyHolder(policy_holder policyHolder) {
+        policyHolders.add(policyHolder);
+    }
     // get policy holder by id
     public static policy_holder getPolicyHolderById(String id) {
         for (policy_holder policyHolder : policyHolders) {
@@ -182,5 +185,29 @@ public class policy_holder extends customer implements Id_generate {
                 ", claim=" + getClaims() +
                 ", dependents=" + dependents +
                 '}';
+    }
+    // fromString method
+    public static policy_holder fromString(String line) {
+        String[] parts = line.split(",");
+        String id = parts[0];
+        String fullName = parts[1];
+        int insuranceCard = Integer.parseInt(parts[2]);
+        List<String> claims = new ArrayList<>();
+        if (!parts[3].isEmpty()) {
+            String[] claimsArray = parts[3].split(";");
+            for (String claim : claimsArray) {
+                claims.add(claim);
+            }
+        }
+        List<String> dependents = new ArrayList<>();
+        if (!parts[4].isEmpty()) {
+            String[] dependentsArray = parts[4].split(";");
+            for (String dependent : dependentsArray) {
+                dependents.add(dependent);
+            }
+        }
+        policy_holder newPolicyHolder = new policy_holder(id, fullName, insuranceCard, claims, dependents);
+        policyHolders.add(newPolicyHolder);
+        return newPolicyHolder;
     }
 }
