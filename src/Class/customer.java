@@ -10,6 +10,10 @@ public abstract class customer implements Id_generate {
     private int insuranceCard;
     private List<String> claims;
 
+    // default constructor
+    public customer() {
+    }
+
     public customer(String id, String fullName, int insuranceCard, List<String> claims) {
         this.id = id;
         this.fullName = fullName;
@@ -21,6 +25,10 @@ public abstract class customer implements Id_generate {
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getFullName() {

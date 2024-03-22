@@ -1,15 +1,20 @@
 package Class;
 
+import Interface.From_String;
 import Interface.Id_generate;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class policy_holder extends customer implements Id_generate {
+public class policy_holder extends customer implements Id_generate, From_String {
     private List<String> dependents;
     // Define policyHolders as a list of policy_holder objects
     public static List<policy_holder> policyHolders = new ArrayList<>();
+
+    // default constructor
+    public policy_holder() {
+    }
 
     public policy_holder(String id, String fullName, int insuranceCard, List<String> claims, List<String> dependents) {
         super(id, fullName, insuranceCard, claims);
@@ -187,11 +192,13 @@ public class policy_holder extends customer implements Id_generate {
                 '}';
     }
     // fromString method
-    public static policy_holder fromString(String line) {
+    @Override
+    public void fromString(String line) {
         String[] parts = line.split(",");
         String id = parts[0];
         String fullName = parts[1];
         int insuranceCard = Integer.parseInt(parts[2]);
+
         List<String> claims = new ArrayList<>();
         if (!parts[3].isEmpty()) {
             String[] claimsArray = parts[3].split(";");
@@ -199,6 +206,7 @@ public class policy_holder extends customer implements Id_generate {
                 claims.add(claim);
             }
         }
+
         List<String> dependents = new ArrayList<>();
         if (!parts[4].isEmpty()) {
             String[] dependentsArray = parts[4].split(";");
@@ -206,8 +214,13 @@ public class policy_holder extends customer implements Id_generate {
                 dependents.add(dependent);
             }
         }
-        policy_holder newPolicyHolder = new policy_holder(id, fullName, insuranceCard, claims, dependents);
-        policyHolders.add(newPolicyHolder);
-        return newPolicyHolder;
+
+        this.setId(id);
+        this.setFullName(fullName);
+        this.setInsuranceCard(insuranceCard);
+        this.setClaims(claims);
+        this.setDependents(dependents);
+
+        policyHolders.add(this);
     }
 }

@@ -28,7 +28,8 @@ public class Load_Save_Data {
             Scanner insuranceCardScanner = new Scanner(insuranceCardFile);
             while (insuranceCardScanner.hasNextLine()) {
                 String line = insuranceCardScanner.nextLine();
-                insurance_card insuranceCard = insurance_card.fromString(line);
+                insurance_card insuranceCard = new insurance_card();
+                insuranceCard.fromString(line);
                 if (insuranceCard != null) {
                     insurance_card.addInsuranceCard(insuranceCard);
                 }
@@ -40,7 +41,8 @@ public class Load_Save_Data {
             Scanner claimScanner = new Scanner(claimFile);
             while (claimScanner.hasNextLine()) {
                 String line = claimScanner.nextLine();
-                claim Claim = claim.fromString(line);
+                claim Claim = new claim();
+                Claim.fromString(line);
                 if (Claim != null) {
                     claim.addClaim(Claim);
                 }
@@ -52,11 +54,13 @@ public class Load_Save_Data {
             Scanner customerScanner = new Scanner(customerFile);
             while (customerScanner.hasNextLine()) {
                 String line = customerScanner.nextLine();
-                policy_holder policyHolder = policy_holder.fromString(line);
+                policy_holder policyHolder = new policy_holder();
+                policyHolder.fromString(line);
                 if (policyHolder != null) {
                     policy_holder.addPolicyHolder(policyHolder);
                 }
-                dependent Dependent = dependent.fromString(line);
+                dependent Dependent = new dependent();
+                Dependent.fromString(line);
                 if (Dependent != null) {
                     dependent.addDependent(Dependent);
                 }

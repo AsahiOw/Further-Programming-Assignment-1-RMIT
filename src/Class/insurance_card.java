@@ -1,5 +1,6 @@
 package Class;
 
+import Interface.From_String;
 import Interface.Id_generate;
 import java.io.*;
 import java.text.ParseException;
@@ -9,13 +10,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-public class insurance_card implements Id_generate {
+public class insurance_card implements Id_generate, From_String {
     private int id;
     private String customer;
     private String policyOwner;
     private Date expirationDate;
     // Define insuranceCards as a list of insurance_card objects
     public static List<insurance_card> insuranceCards = new ArrayList<>();
+
+    // default constructor
+    public insurance_card() {
+    }
 
     public insurance_card(int id, String customer, String policyOwner, Date expirationDate) {
         this.id = id;
@@ -27,6 +32,10 @@ public class insurance_card implements Id_generate {
     //getters and setters
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getCustomer() {
@@ -108,7 +117,7 @@ public class insurance_card implements Id_generate {
         return null;
     }
     // CRU for insurance card
-    public void create_insurance_card(Scanner scanner) throws ParseException {
+    public static void create_insurance_card(Scanner scanner) throws ParseException {
         System.out.println("Enter the customer of the insurance card: ");
         String customer = scanner.nextLine();
 
@@ -119,7 +128,8 @@ public class insurance_card implements Id_generate {
         String expirationDateInput = scanner.nextLine();
         Date expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse(expirationDateInput);
 
-        int id = Integer.parseInt(generateId());
+        insurance_card newInsuranceCardInsert = new insurance_card();
+        int id = Integer.parseInt(newInsuranceCardInsert.generateId());
         insurance_card newInsuranceCard = new insurance_card(id, customer, policyOwner, expirationDate);
         insuranceCards.add(newInsuranceCard);
 
@@ -211,7 +221,8 @@ public class insurance_card implements Id_generate {
                 '}';
     }
     // fromString method
-    public static insurance_card fromString(String line) {
+    @Override
+    public void fromString(String line) {
         String[] parts = line.split(",");
         int id = Integer.parseInt(parts[0]);
         String customer = parts[1];
@@ -224,8 +235,11 @@ public class insurance_card implements Id_generate {
                 throw new RuntimeException(e);
             }
         }
-        insurance_card newInsuranceCard = new insurance_card(id, customer, policyOwner, expirationDate);
-        insuranceCards.add(newInsuranceCard);
-        return newInsuranceCard;
+        this.setId(id);
+        this.setCustomer(customer);
+        this.setPolicyOwner(policyOwner);
+        this.setExpirationDate(expirationDate);
+
+        insuranceCards.add(this);
     }
 }

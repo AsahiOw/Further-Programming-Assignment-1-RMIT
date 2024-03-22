@@ -43,9 +43,10 @@ public class ClaimProcessManagerImplement implements ClaimProcessManager{
                 documents.add(document.trim());
             }
         }
-        String id = null;
+        claim claimInstance = new claim();
+        String id = claimInstance.generateId();
         claim newClaim = new claim(id, claimDate, insuredPerson, insuranceCard, examDate, documents, claimAmount, status, bankingInfo);
-        id = newClaim.generateId();
+
         claims.add(newClaim);
 
         System.out.println("The claim has been created successfully with ID: " + id);

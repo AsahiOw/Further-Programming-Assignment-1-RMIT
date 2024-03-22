@@ -1,15 +1,21 @@
 package Class;
 
+import Interface.From_String;
 import Interface.Id_generate;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class dependent extends customer implements Id_generate {
+public class dependent extends customer implements Id_generate, From_String {
     private String policyHolder;
     // Define Dependents as a list of dependent objects
     public static List<dependent> Dependents = new ArrayList<>();
+
+    // default constructor
+    public dependent() {
+    }
+
     public dependent(String id, String fullName, int insuranceCard, List<String> claims, String policyHolder) {
         super(id, fullName, insuranceCard, claims);
         this.policyHolder = policyHolder;
@@ -174,11 +180,13 @@ public class dependent extends customer implements Id_generate {
                 '}';
     }
     // fromString method
-    public static dependent fromString(String line) {
+    @Override
+    public void fromString(String line) {
         String[] parts = line.split(",");
         String id = parts[0];
         String fullName = parts[1];
         int insuranceCard = Integer.parseInt(parts[2]);
+
         List<String> claims = new ArrayList<>();
         if (!parts[3].equals("null")) {
             String[] claimsArray = parts[3].split(";");
@@ -186,9 +194,15 @@ public class dependent extends customer implements Id_generate {
                 claims.add(claim);
             }
         }
+
         String policyHolder = parts[4];
-        dependent newDependent = new dependent(id, fullName, insuranceCard, claims, policyHolder);
-        Dependents.add(newDependent);
-        return newDependent;
+
+        this.setId(id);
+        this.setFullName(fullName);
+        this.setInsuranceCard(insuranceCard);
+        this.setClaims(claims);
+        this.setPolicyHolder(policyHolder);
+
+        Dependents.add(this);
     }
 }

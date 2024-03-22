@@ -1,12 +1,13 @@
 package Class;
 
+import Interface.From_String;
 import Interface.Id_generate;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import Enum.*;
-public class claim implements Id_generate {
+public class claim implements Id_generate, From_String {
     private String id;
     private Date ClaimDate;
     private String insuredPerson;
@@ -18,6 +19,10 @@ public class claim implements Id_generate {
     private String BankingInfo;
     // Define Dependents as a list of dependent objects
     public static List<claim> claims = new ArrayList<>();
+
+    // default constructor
+    public claim() {
+    }
 
     public claim(String id, Date claimDate, String insuredPerson, int insuranceCard, Date examDate, List<String> documents, double claimAmount, allStatus status, String bankingInfo) {
         this.id = id;
@@ -35,6 +40,11 @@ public class claim implements Id_generate {
     public String getId() {
         return id;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public Date getClaimDate() {
         return ClaimDate;
     }
@@ -166,7 +176,8 @@ public class claim implements Id_generate {
                 '}';
     }
     // fromString method
-    public static claim fromString(String line) {
+    @Override
+    public void fromString(String line) {
         String[] fields = line.split(",");
         String id = fields[0];
         Date ClaimDate = new Date(fields[1]);
@@ -180,6 +191,17 @@ public class claim implements Id_generate {
         double claimAmount = Double.parseDouble(fields[6]);
         allStatus status = allStatus.valueOf(fields[7]);
         String BankingInfo = fields[8];
-        return new claim(id, ClaimDate, insuredPerson, insuranceCard, examDate, documents, claimAmount, status, BankingInfo);
+
+        this.setId(id);
+        this.setClaimDate(ClaimDate);
+        this.setInsuredPerson(insuredPerson);
+        this.setInsuranceCard(insuranceCard);
+        this.setExamDate(examDate);
+        this.setDocuments(documents);
+        this.setClaimAmount(claimAmount);
+        this.setStatus(status);
+        this.setBankingInfo(BankingInfo);
+
+        claims.add(this);
     }
 }
