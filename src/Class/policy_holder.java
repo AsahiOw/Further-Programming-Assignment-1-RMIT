@@ -1,30 +1,36 @@
 package Class;
 
+import Interface.Id_generate;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import static Class.dependent.getDependentById;
 
-public class policy_holder extends customer{
-    private List<dependent> dependents;
-    private static List<policy_holder> policyHolders = new ArrayList<>();
+public class policy_holder extends customer implements Id_generate {
+    private List<String> dependents;
+    // Define policyHolders as a list of policy_holder objects
+    public static List<policy_holder> policyHolders = new ArrayList<>();
 
-    public policy_holder(String id, String fullName, insurance_card insuranceCard, List<claim> claims, List<dependent> dependents) {
+    public policy_holder(String id, String fullName, int insuranceCard, List<String> claims, List<String> dependents) {
         super(id, fullName, insuranceCard, claims);
         this.dependents = dependents;
-        policyHolders.add(this);
     }
 
     //getters and setters
-    public List<dependent> getDependents() {
+    public List<String> getDependents() {
         return dependents;
     }
-    public void setDependents(List<dependent> dependents) {
+
+    public void setDependents(List<String> dependents) {
         this.dependents = dependents;
     }
 
     // method section
-    //    get policy holder by id
+    // add policy holder
+    public static void addPolicyHolder(policy_holder policyHolder) {
+        policyHolders.add(policyHolder);
+    }
+    // get policy holder by id
     public static policy_holder getPolicyHolderById(String id) {
         for (policy_holder policyHolder : policyHolders) {
             if (policyHolder.getId().equals(id)) {
@@ -33,46 +39,121 @@ public class policy_holder extends customer{
         }
         return null;
     }
-    //    list of all policy holders
+    // get all policy holders
     public static List<policy_holder> getPolicyHolders() {
         return policyHolders;
     }
-    //    RUD overriden methods for policyholder
+    // This is the method that reads the last assigned id from the file lastAssignedCustomerId.txt. If the file does not exist, it returns 0.
     @Override
-    public void delete_customer(Scanner scanner) {
-        System.out.println("Enter the id of the dependent you want to delete");
-        String id = scanner.nextLine();
-        dependent dependent = getDependentById(id);
-        if (dependent != null) {
-            dependents.remove(dependent);
-            System.out.println("The dependent has been deleted successfully");
-        } else {
-            System.out.println("The dependent does not exist");
+    public int readLastAssignedId() {
+        try {
+            File file = new File("src/Id_folder/lastAssignedCustomerId.txt");
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line = reader.readLine();
+            reader.close();
+            return line != null ? Integer.parseInt(line) : 0;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return 0;
         }
+    }
+    private int lastAssignedId = readLastAssignedId();
+    @Override
+    public void writeLastAssignedId() {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter("src/Id_folder/lastAssignedCustomerId.txt"));
+            writer.write(String.valueOf(lastAssignedId));
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @Override
+    public String generateId() {
+        lastAssignedId++;
+        writeLastAssignedId();
+        return String.format("C-%07d", lastAssignedId);
+    }
+    // CRU overriden methods for policyholder
+    @Override
+    public void create_customer(Scanner scanner) {
+        System.out.println("Enter the full name of the policy holder: ");
+        String fullName = scanner.nextLine();
+
+        System.out.println("Enter the insurance card number of the policy holder: ");
+        int insuranceCard = Integer.parseInt(scanner.nextLine());
+
+        List<String> claims = new ArrayList<>();
+        System.out.println("Enter the claims of the policy holder (separated by comma): ");
+        String claimsInput = scanner.nextLine();
+        if (!claimsInput.isEmpty()) {
+            String[] claimsArray = claimsInput.split(",");
+            for (String claim : claimsArray) {
+                claims.add(claim.trim());
+            }
+        }
+
+        List<String> dependents = new ArrayList<>();
+        System.out.println("Enter the dependents of the policy holder (separated by comma): ");
+        String dependentsInput = scanner.nextLine();
+        if (!dependentsInput.isEmpty()) {
+            String[] dependentsArray = dependentsInput.split(",");
+            for (String dependent : dependentsArray) {
+                dependents.add(dependent.trim());
+            }
+        }
+
+        String id = generateId();
+        policy_holder newPolicyHolder = new policy_holder(id, fullName, insuranceCard, claims, dependents);
+        policyHolders.add(newPolicyHolder);
+
+        System.out.println("The policy holder has been created successfully with ID: " + id);
     }
 
     @Override
     public void update_customer(Scanner scanner) {
         System.out.println("Enter the ID of the policy holder you want to update: ");
         String id = scanner.nextLine();
-        policy_holder policyHolder = getPolicyHolderById(id);
-        if (policyHolder != null) {
+        policy_holder policyHolderToUpdate = getPolicyHolderById(id);
+        if (policyHolderToUpdate != null) {
             System.out.println("Enter the new full name of the policy holder (or press Enter to skip): ");
             String fullName = scanner.nextLine();
             if (!fullName.isEmpty()) {
-                policyHolder.setFullName(fullName);
+                policyHolderToUpdate.setFullName(fullName);
             }
-            System.out.println("Enter the new insurance card ID of the policy holder (or press Enter to skip): ");
-            String insuranceCardIDInput = scanner.nextLine();
-            if (!insuranceCardIDInput.isEmpty()) {
-                int insuranceCardID = Integer.parseInt(insuranceCardIDInput);
-                insurance_card insuranceCard = insurance_card.getInsuranceCardById(insuranceCardID);
-                if (insuranceCard != null) {
-                    policyHolder.setInsuranceCard(insuranceCard);
-                } else {
-                    System.out.println("There is no valid insurance card with the provided ID.");
+
+            System.out.println("Enter the new insurance card number of the policy holder (or press Enter to skip): ");
+            String insuranceCardInput = scanner.nextLine();
+            if (!insuranceCardInput.isEmpty()) {
+                int insuranceCard = Integer.parseInt(insuranceCardInput);
+                policyHolderToUpdate.setInsuranceCard(insuranceCard);
+            }
+
+            System.out.println("Enter the new claims of the policy holder (separated by comma, or press Enter to skip): ");
+            String claimsInput = scanner.nextLine();
+            if (!claimsInput.isEmpty()) {
+                List<String> claims = new ArrayList<>();
+                String[] claimsArray = claimsInput.split(",");
+                for (String claim : claimsArray) {
+                    claims.add(claim.trim());
                 }
+                policyHolderToUpdate.setClaims(claims);
             }
+
+            System.out.println("Enter the new dependents of the policy holder (separated by comma, or press Enter to skip): ");
+            String dependentsInput = scanner.nextLine();
+            if (!dependentsInput.isEmpty()) {
+                List<String> dependents = new ArrayList<>();
+                String[] dependentsArray = dependentsInput.split(",");
+                for (String dependent : dependentsArray) {
+                    dependents.add(dependent.trim());
+                }
+                policyHolderToUpdate.setDependents(dependents);
+            }
+
             System.out.println("The policy holder has been updated successfully");
         } else {
             System.out.println("The policy holder does not exist");
@@ -83,21 +164,13 @@ public class policy_holder extends customer{
     public void read_customer(Scanner scanner) {
         System.out.println("Enter the ID of the policy holder you want to view: ");
         String id = scanner.nextLine();
-        policy_holder policyHolder = getPolicyHolderById(id);
-        if (policyHolder != null) {
-            System.out.println("Policy Holder ID: " + policyHolder.getId());
-            System.out.println("Full Name: " + policyHolder.getFullName());
-            if (policyHolder.getInsuranceCard() != null) {
-                System.out.println("Insurance Card ID: " + policyHolder.getInsuranceCard().getId());
-            }
-            System.out.println("Claims: ");
-            for (claim claim : policyHolder.getClaims()) {
-                System.out.println("Claim ID: " + claim.getId());
-            }
-            System.out.println("Dependents: ");
-            for (dependent dependent : policyHolder.getDependents()) {
-                System.out.println("Dependent ID: " + dependent.getId());
-            }
+        policy_holder policyHolderToView = getPolicyHolderById(id);
+        if (policyHolderToView != null) {
+            System.out.println("Policy Holder ID: " + policyHolderToView.getId());
+            System.out.println("Full Name: " + policyHolderToView.getFullName());
+            System.out.println("Insurance Card Number: " + policyHolderToView.getInsuranceCard());
+            System.out.println("Claims: " + String.join(", ", policyHolderToView.getClaims()));
+            System.out.println("Dependents: " + String.join(", ", policyHolderToView.getDependents()));
         } else {
             System.out.println("The policy holder does not exist");
         }
@@ -112,5 +185,29 @@ public class policy_holder extends customer{
                 ", claim=" + getClaims() +
                 ", dependents=" + dependents +
                 '}';
+    }
+    // fromString method
+    public static policy_holder fromString(String line) {
+        String[] parts = line.split(",");
+        String id = parts[0];
+        String fullName = parts[1];
+        int insuranceCard = Integer.parseInt(parts[2]);
+        List<String> claims = new ArrayList<>();
+        if (!parts[3].isEmpty()) {
+            String[] claimsArray = parts[3].split(";");
+            for (String claim : claimsArray) {
+                claims.add(claim);
+            }
+        }
+        List<String> dependents = new ArrayList<>();
+        if (!parts[4].isEmpty()) {
+            String[] dependentsArray = parts[4].split(";");
+            for (String dependent : dependentsArray) {
+                dependents.add(dependent);
+            }
+        }
+        policy_holder newPolicyHolder = new policy_holder(id, fullName, insuranceCard, claims, dependents);
+        policyHolders.add(newPolicyHolder);
+        return newPolicyHolder;
     }
 }

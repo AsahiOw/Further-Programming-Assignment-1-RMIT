@@ -1,21 +1,23 @@
 package Class;
 
+import Interface.Id_generate;
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-public class insurance_card {
-    private static int lastAssignedId = readLastAssignedId();
+public class insurance_card implements Id_generate {
     private int id;
-    private static allCustomer customer;
-    private policy_holder policyOwner;
+    private String customer;
+    private String policyOwner;
     private Date expirationDate;
-    private static List<insurance_card> insuranceCards;
-    private claim claims;
+    // Define insuranceCards as a list of insurance_card objects
+    public static List<insurance_card> insuranceCards = new ArrayList<>();
 
-    public insurance_card(int id, allCustomer customer, policy_holder policyOwner, Date expirationDate) {
+    public insurance_card(int id, String customer, String policyOwner, Date expirationDate) {
         this.id = id;
         this.customer = customer;
         this.policyOwner = policyOwner;
@@ -27,23 +29,19 @@ public class insurance_card {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public allCustomer getCustomer() {
+    public String getCustomer() {
         return customer;
     }
 
-    public void setCustomer(allCustomer customer) {
+    public void setCustomer(String customer) {
         this.customer = customer;
     }
 
-    public policy_holder getPolicyOwner() {
+    public String getPolicyOwner() {
         return policyOwner;
     }
 
-    public void setPolicyOwner(policy_holder policyOwner) {
+    public void setPolicyOwner(String policyOwner) {
         this.policyOwner = policyOwner;
     }
 
@@ -55,27 +53,18 @@ public class insurance_card {
         this.expirationDate = expirationDate;
     }
 
+    // method section
+    // add insurance card
+    public static void addInsuranceCard(insurance_card insuranceCard) {
+        insuranceCards.add(insuranceCard);
+    }
+    // get all claims
     public static List<insurance_card> getInsuranceCards() {
-        if (insuranceCards == null) {
-            insuranceCards = new ArrayList<>();
-        }
         return insuranceCards;
     }
-
-    public void setInsuranceCards(List<insurance_card> insuranceCards) {
-        insurance_card.insuranceCards = insuranceCards;
-    }
-
-    public void setClaim(claim claims) {
-        this.claims = claims;
-    }
-    public claim getClaim() {
-        return this.claims;
-    }
-
-    // method section
-    //    This is the method that reads the last assigned id from the file lastAssignedInsuranceId.txt. If the file does not exist, it returns 0.
-    private static int readLastAssignedId() {
+    // This is the method that reads the last assigned id from the file lastAssignedInsuranceId.txt. If the file does not exist, it returns 0.
+    @Override
+    public int readLastAssignedId() {
         try {
             File file = new File("src/Id_folder/lastAssignedInsuranceId.txt");
             if (!file.exists()) {
@@ -89,7 +78,9 @@ public class insurance_card {
             throw new RuntimeException(e);
         }
     }
-    private static void writeLastAssignedId() {
+    private int lastAssignedId = readLastAssignedId();
+    @Override
+    public void writeLastAssignedId() {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter("src/Id_folder/lastAssignedInsuranceId.txt"));
             writer.write(String.valueOf(lastAssignedId));
@@ -98,10 +89,14 @@ public class insurance_card {
             throw new RuntimeException(e);
         }
     }
-    public static int generateId() {
+    @Override
+    public String generateId() {
         lastAssignedId++;
+        while (String.valueOf(lastAssignedId).length() < 10) {
+            lastAssignedId *= 10;
+        }
         writeLastAssignedId();
-        return lastAssignedId;
+        return String.valueOf(lastAssignedId);
     }
     // get insurance card by id
     public static insurance_card getInsuranceCardById(int id){
@@ -112,109 +107,97 @@ public class insurance_card {
         }
         return null;
     }
-    //    CRUD for insurance card
-    public static void create_insurance_card(Scanner scanner){
-        allCustomer Customer = null;
-        while (Customer == null) {
-            System.out.print("Enter the customer's ID: ");
-            String customerID = scanner.nextLine();
-            Customer = customer.getCustomerById(customerID);
-            if (Customer == null) {
-                System.out.println("There is no valid customer with the provided ID.");
-            }
-        }
+    // CRU for insurance card
+    public void create_insurance_card(Scanner scanner) throws ParseException {
+        System.out.println("Enter the customer of the insurance card: ");
+        String customer = scanner.nextLine();
 
-        policy_holder policyHolder = null;
-        while (policyHolder == null) {
-            System.out.print("Enter the policy holder's ID: ");
-            String policyHolderID = scanner.nextLine();
-            policyHolder = policy_holder.getPolicyHolderById(policyHolderID);
-            if (policyHolder == null) {
-                System.out.println("There is no valid policy holder with the provided ID.");
-            }
-        }
+        System.out.println("Enter the policy owner of the insurance card: ");
+        String policyOwner = scanner.nextLine();
 
-        Date expirationDate = null;
-        while (expirationDate == null) {
-            System.out.print("Enter the expiration date of the insurance card (yyyy-MM-dd): ");
-            String expirationDateInput = scanner.nextLine();
-            try {
-                expirationDate = new Date(expirationDateInput);
-            } catch (Exception e) {
-                System.out.println("Invalid date format.");
-            }
-        }
+        System.out.println("Enter the expiration date of the insurance card (in format yyyy-mm-dd): ");
+        String expirationDateInput = scanner.nextLine();
+        Date expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse(expirationDateInput);
 
-        int id = generateId();
-        insurance_card new_card = new insurance_card(id, Customer, policyHolder, expirationDate);
+        int id = Integer.parseInt(generateId());
+        insurance_card newInsuranceCard = new insurance_card(id, customer, policyOwner, expirationDate);
+        insuranceCards.add(newInsuranceCard);
+
+        System.out.println("The insurance card has been created successfully with ID: " + id);
     }
-    public static void delete_insurance_card(Scanner scanner){
-        System.out.println("Enter the id of the insurance card you want to delete");
-        int id = scanner.nextInt();
-        insurance_card insuranceCard = getInsuranceCardById(id);
-        if (insuranceCard != null) {
-            customer Customer = insuranceCard.getCustomer();
-            if (Customer != null) {
-                Customer.setInsuranceCard(null);
-            }
-            insuranceCards.remove(insuranceCard);
-            System.out.println("The insurance card has been deleted successfully");
-        } else {
-            System.out.println("The insurance card does not exist");
-        }
-    }
-    public static void update_insurance_card(Scanner scanner){
+
+    public static void update_insurance_card(Scanner scanner) throws ParseException {
         System.out.println("Enter the ID of the insurance card you want to update: ");
-        int id = scanner.nextInt();
-        insurance_card insuranceCard = getInsuranceCardById(id);
-        if (insuranceCard != null) {
-            System.out.println("Enter the new customer ID of the insurance card (or press Enter to skip): ");
-            String customerIDInput = scanner.nextLine();
-            if (!customerIDInput.isEmpty()) {
-                allCustomer Customer = allCustomer.getCustomerById(customerIDInput);
-                if (Customer != null) {
-                    insuranceCard.setCustomer(Customer);
-                } else {
-                    System.out.println("There is no valid customer with the provided ID.");
-                }
+        int id = Integer.parseInt(scanner.nextLine());
+        insurance_card insuranceCardToUpdate = getInsuranceCardById(id);
+        if (insuranceCardToUpdate != null) {
+            System.out.println("Enter the new customer of the insurance card (or press Enter to skip): ");
+            String customer = scanner.nextLine();
+            if (!customer.isEmpty()) {
+                insuranceCardToUpdate.setCustomer(customer);
             }
-            System.out.println("Enter the new policy holder ID of the insurance card (or press Enter to skip): ");
-            String policyHolderIDInput = scanner.nextLine();
-            if (!policyHolderIDInput.isEmpty()) {
-                policy_holder policyHolder = policy_holder.getPolicyHolderById(policyHolderIDInput);
-                if (policyHolder != null) {
-                    insuranceCard.setPolicyOwner(policyHolder);
-                } else {
-                    System.out.println("There is no valid policy holder with the provided ID.");
-                }
+
+            System.out.println("Enter the new policy owner of the insurance card (or press Enter to skip): ");
+            String policyOwner = scanner.nextLine();
+            if (!policyOwner.isEmpty()) {
+                insuranceCardToUpdate.setPolicyOwner(policyOwner);
             }
-            System.out.println("Enter the new expiration date of the insurance card (yyyy-MM-dd), (or press Enter to skip): ");
+
+            System.out.println("Enter the new expiration date of the insurance card (in format yyyy-mm-dd, or press Enter to skip): ");
             String expirationDateInput = scanner.nextLine();
             if (!expirationDateInput.isEmpty()) {
-                Date expirationDate = null;
-                try {
-                    expirationDate = new Date(expirationDateInput);
-                    insuranceCard.setExpirationDate(expirationDate);
-                } catch (Exception e) {
-                    System.out.println("Invalid date format.");
-                }
+                Date expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse(expirationDateInput);
+                insuranceCardToUpdate.setExpirationDate(expirationDate);
             }
+
             System.out.println("The insurance card has been updated successfully");
         } else {
             System.out.println("The insurance card does not exist");
         }
     }
-    public static void read_insurance_card(Scanner scanner){
+
+    public static void read_insurance_card(Scanner scanner) {
         System.out.println("Enter the ID of the insurance card you want to view: ");
-        int id = scanner.nextInt();
-        insurance_card insuranceCard = getInsuranceCardById(id);
-        if (insuranceCard != null) {
-            System.out.println("ID: " + insuranceCard.getId());
-            System.out.println("Customer: " + insuranceCard.getCustomer().getFullName());
-            System.out.println("Policy Holder: " + insuranceCard.getPolicyOwner().getFullName());
-            System.out.println("Expiration Date: " + insuranceCard.getExpirationDate());
+        int id = Integer.parseInt(scanner.nextLine());
+        insurance_card insuranceCardToView = getInsuranceCardById(id);
+        if (insuranceCardToView != null) {
+            System.out.println("Insurance Card ID: " + insuranceCardToView.getId());
+            System.out.println("Customer: " + insuranceCardToView.getCustomer());
+            System.out.println("Policy Owner: " + insuranceCardToView.getPolicyOwner());
+            System.out.println("Expiration Date: " + new SimpleDateFormat("yyyy-MM-dd").format(insuranceCardToView.getExpirationDate()));
         } else {
             System.out.println("The insurance card does not exist");
+        }
+    }
+
+    public static void read_all_insurance_card() {
+        for (insurance_card insuranceCard : insuranceCards) {
+            System.out.println("Insurance Card ID: " + insuranceCard.getId());
+            System.out.println("Customer: " + insuranceCard.getCustomer());
+            System.out.println("Policy Owner: " + insuranceCard.getPolicyOwner());
+            System.out.println("Expiration Date: " + new SimpleDateFormat("yyyy-MM-dd").format(insuranceCard.getExpirationDate()));
+        }
+    }
+
+    public static void read_all_nonexpired_insurance_card() {
+        for (insurance_card insuranceCard : insuranceCards) {
+            if (insuranceCard.getExpirationDate().after(new Date())) {
+                System.out.println("Insurance Card ID: " + insuranceCard.getId());
+                System.out.println("Customer: " + insuranceCard.getCustomer());
+                System.out.println("Policy Owner: " + insuranceCard.getPolicyOwner());
+                System.out.println("Expiration Date: " + new SimpleDateFormat("yyyy-MM-dd").format(insuranceCard.getExpirationDate()));
+            }
+        }
+    }
+
+    public static void read_all_expired_insurance_card() {
+        for (insurance_card insuranceCard : insuranceCards) {
+            if (insuranceCard.getExpirationDate().before(new Date())) {
+                System.out.println("Insurance Card ID: " + insuranceCard.getId());
+                System.out.println("Customer: " + insuranceCard.getCustomer());
+                System.out.println("Policy Owner: " + insuranceCard.getPolicyOwner());
+                System.out.println("Expiration Date: " + new SimpleDateFormat("yyyy-MM-dd").format(insuranceCard.getExpirationDate()));
+            }
         }
     }
 
@@ -222,9 +205,27 @@ public class insurance_card {
     public String toString() {
         return "{" +
                 "id=" + id +
+                ", customer='" + customer +
                 ", policyOwner=" + policyOwner +
                 ", expirationDate=" + expirationDate +
-                ", claims=" + claims +
                 '}';
+    }
+    // fromString method
+    public static insurance_card fromString(String line) {
+        String[] parts = line.split(",");
+        int id = Integer.parseInt(parts[0]);
+        String customer = parts[1];
+        String policyOwner = parts[2];
+        Date expirationDate = null;
+        if (!parts[3].isEmpty()) {
+            try {
+                expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse(parts[3]);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        insurance_card newInsuranceCard = new insurance_card(id, customer, policyOwner, expirationDate);
+        insuranceCards.add(newInsuranceCard);
+        return newInsuranceCard;
     }
 }
