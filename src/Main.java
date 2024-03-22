@@ -3,7 +3,6 @@ import Class.*;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Scanner;
-import Class.*;
 import static Class.Load_Save_Data.loadDataFromFilesPublic;
 
 public class Main {
@@ -151,7 +150,24 @@ public class Main {
                             insurance_card.read_insurance_card(scanner);
                             break;
                         case 13:
-                            insurance_card.read_all_insurance_cards();
+                            insurance_card.read_all_insurance_card();
+                            break;
+                        case 14:
+                            System.out.println("1. Read all non-expired insurance cards");
+                            System.out.println("2. Read all expired insurance cards");
+                            System.out.print("Enter your choice: ");
+                            int checkInsuranceCardDateChoice = scanner.nextInt();
+                            switch (checkInsuranceCardDateChoice) {
+                                case 1:
+                                    insurance_card.read_all_nonexpired_insurance_card();
+                                    break;
+                                case 2:
+                                    insurance_card.read_all_expired_insurance_card();
+                                    break;
+                                default:
+                                    System.out.println("Invalid choice.");
+                                    break;
+                            }
                             break;
                         case 15:
                             Load_Save_Data.saveDataToFile();
