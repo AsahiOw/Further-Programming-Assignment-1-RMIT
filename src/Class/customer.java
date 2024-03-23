@@ -58,12 +58,12 @@ public abstract class customer implements Id_generate {
     // method section
     // customer CRU
     public static void read_all_customers(){
+        System.out.println("ALL Policy holders");
         for (policy_holder policyHolder : policy_holder.getPolicyHolders()) {
-            System.out.println("ALL Policy holders");
             System.out.println(policyHolder);
         }
+        System.out.println("ALL Dependents");
         for (dependent dependent : dependent.getDependents()) {
-            System.out.println("ALL Dependents");
             System.out.println(dependent);
         }
     }

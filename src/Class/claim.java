@@ -3,6 +3,8 @@ package Class;
 import Interface.From_String;
 import Interface.Id_generate;
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -178,30 +180,44 @@ public class claim implements Id_generate, From_String {
     // fromString method
     @Override
     public void fromString(String line) {
-        String[] fields = line.split(",");
-        String id = fields[0];
-        Date ClaimDate = new Date(fields[1]);
-        String insuredPerson = fields[2];
-        int insuranceCard = Integer.parseInt(fields[3]);
-        Date examDate = new Date(fields[4]);
-        List<String> documents = new ArrayList<>();
-        for (String document : fields[5].split(";")) {
-            documents.add(document);
+        String[] parts = line.split(", ");
+        String id = parts[0].split("=")[1].replace("'", "");
+        Date claimDate = null;
+        try {
+            claimDate = new SimpleDateFormat("yyyy-MM-dd").parse(parts[1].split("=")[1]);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
         }
-        double claimAmount = Double.parseDouble(fields[6]);
-        allStatus status = allStatus.valueOf(fields[7]);
-        String BankingInfo = fields[8];
+        String insuredPerson = parts[2].split("=")[1].replace("'", "");
+        int insuranceCard = Integer.parseInt(parts[3].split("=")[1]);
+
+        Date examDate = null;
+        try {
+            examDate = new SimpleDateFormat("yyyy-MM-dd").parse(parts[4].split("=")[1]);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        List<String> documents = new ArrayList<>();
+        if (!parts[5].split("=")[1].equals("[]")) {
+            String[] documentsArray = parts[5].split("=")[1].replace("[", "").replace("]", "").split(", ");
+            for (String document : documentsArray) {
+                documents.add(document.trim());
+            }
+        }
+
+        double claimAmount = Double.parseDouble(parts[6].split("=")[1]);
+        allStatus status = allStatus.valueOf(parts[7].split("=")[1].replace("'", ""));
+        String bankingInfo = parts[8].split("=")[1].replace("'", "");
 
         this.setId(id);
-        this.setClaimDate(ClaimDate);
+        this.setClaimDate(claimDate);
         this.setInsuredPerson(insuredPerson);
         this.setInsuranceCard(insuranceCard);
         this.setExamDate(examDate);
         this.setDocuments(documents);
         this.setClaimAmount(claimAmount);
         this.setStatus(status);
-        this.setBankingInfo(BankingInfo);
-
-        claims.add(this);
+        this.setBankingInfo(bankingInfo);
     }
 }

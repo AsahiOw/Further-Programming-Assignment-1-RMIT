@@ -36,7 +36,7 @@ public class Main {
             input = scanner.nextLine();
             try {
                 choice = Integer.parseInt(input);
-                if (choice < 1 || choice > 14) {
+                if (choice < 1 || choice > 15) {
                     System.out.println("Invalid choice. Please choose again.");
                     choice = 0; // Reset choice to an invalid value
                 } else {
@@ -46,6 +46,7 @@ public class Main {
                             System.out.println("2. Add a dependent");
                             System.out.print("Enter your choice: ");
                             int addCustomerChoice = scanner.nextInt();
+                            scanner.nextLine(); // Consume the newline character
                             switch (addCustomerChoice) {
                                 case 1:
                                     policy_holder policyHolderInstance = new policy_holder();
@@ -65,6 +66,7 @@ public class Main {
                             System.out.println("2. Update a dependent's information");
                             System.out.print("Enter your choice: ");
                             int updateCustomerChoice = scanner.nextInt();
+                            scanner.nextLine(); // Consume the newline character
                             switch (updateCustomerChoice) {
                                 case 1:
                                     System.out.println("Enter the id of the policy holder you want to update");
@@ -96,6 +98,7 @@ public class Main {
                             System.out.println("2. Get a dependent's information");
                             System.out.print("Enter your choice: ");
                             int readCustomerChoice = scanner.nextInt();
+                            scanner.nextLine(); // Consume the newline character
                             switch (readCustomerChoice) {
                                 case 1:
                                     System.out.println("Enter the id of the policy holder you want to view");
@@ -157,6 +160,7 @@ public class Main {
                             System.out.println("2. Read all expired insurance cards");
                             System.out.print("Enter your choice: ");
                             int checkInsuranceCardDateChoice = scanner.nextInt();
+                            scanner.nextLine(); // Consume the newline character
                             switch (checkInsuranceCardDateChoice) {
                                 case 1:
                                     insurance_card.read_all_nonexpired_insurance_card();
