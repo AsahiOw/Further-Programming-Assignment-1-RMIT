@@ -9,11 +9,15 @@ import java.util.List;
 import java.util.Scanner;
 
 public class policy_holder extends customer implements Id_generate, From_String {
+
     private List<String> dependents;
+
     // Define policyHolders as a list of policy_holder objects
+
     public static List<policy_holder> policyHolders = new ArrayList<>();
 
     // default constructor
+
     public policy_holder() {
     }
 
@@ -23,6 +27,7 @@ public class policy_holder extends customer implements Id_generate, From_String 
     }
 
     //getters and setters
+
     public List<String> getDependents() {
         return dependents;
     }
@@ -32,11 +37,15 @@ public class policy_holder extends customer implements Id_generate, From_String 
     }
 
     // method section
+
     // add policy holder
+
     public static void addPolicyHolder(policy_holder policyHolder) {
         policyHolders.add(policyHolder);
     }
+
     // get policy holder by id
+
     public static policy_holder getPolicyHolderById(String id) {
         for (policy_holder policyHolder : policyHolders) {
             if (policyHolder.getId().equals(id)) {
@@ -45,11 +54,14 @@ public class policy_holder extends customer implements Id_generate, From_String 
         }
         return null;
     }
+
     // get all policy holders
     public static List<policy_holder> getPolicyHolders() {
         return policyHolders;
     }
+
     // This is the method that reads the last assigned id from the file lastAssignedCustomerId.txt. If the file does not exist, it returns 0.
+
     @Override
     public int readLastAssignedId() {
         try {
@@ -66,7 +78,9 @@ public class policy_holder extends customer implements Id_generate, From_String 
             return 0;
         }
     }
+
     private int lastAssignedId = readLastAssignedId();
+
     @Override
     public void writeLastAssignedId() {
         try {
@@ -77,13 +91,16 @@ public class policy_holder extends customer implements Id_generate, From_String 
             e.printStackTrace();
         }
     }
+
     @Override
     public String generateId() {
         lastAssignedId++;
         writeLastAssignedId();
         return String.format("C-%07d", lastAssignedId);
     }
+
     // CRU overriden methods for policyholder
+
     @Override
     public void create_customer(Scanner scanner) {
         System.out.println("Enter the full name of the policy holder: ");
@@ -179,17 +196,8 @@ public class policy_holder extends customer implements Id_generate, From_String 
         }
     }
 
-    @Override
-    public String toString() {
-        return "{" +
-                "id='" + getId() + '\'' +
-                ", fullName='" + getFullName() + '\'' +
-                ", insuranceCard=" + getInsuranceCard() +
-                ", claim=" + getClaims() +
-                ", dependents=" + dependents +
-                '}';
-    }
     // fromString method
+
     @Override
     public void fromString(String line) {
         String[] parts = line.split(",(?![^\\[]*\\])");
@@ -221,5 +229,16 @@ public class policy_holder extends customer implements Id_generate, From_String 
         this.setInsuranceCard(insuranceCard);
         this.setClaims(claims);
         this.setDependents(dependents);
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id='" + getId() + '\'' +
+                ", fullName='" + getFullName() + '\'' +
+                ", insuranceCard=" + getInsuranceCard() +
+                ", claim=" + getClaims() +
+                ", dependents=" + dependents +
+                '}';
     }
 }

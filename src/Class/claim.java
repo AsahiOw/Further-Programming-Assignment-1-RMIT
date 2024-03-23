@@ -23,6 +23,7 @@ public class claim implements Id_generate, From_String {
     public static List<claim> claims = new ArrayList<>();
 
     // default constructor
+
     public claim() {
     }
 
@@ -112,11 +113,15 @@ public class claim implements Id_generate, From_String {
     }
 
     // method section
+
     // add claim
+
     public static void addClaim(claim claim) {
         claims.add(claim);
     }
+
     // get Claim by id
+
     public static claim getClaimById(String id) {
         for (claim claim : claims) {
             if (claim.getId().equals(id)) {
@@ -125,11 +130,15 @@ public class claim implements Id_generate, From_String {
         }
         return null;
     }
+
     // get all claims
+
     public static List<claim> getClaims() {
         return claims;
     }
+
     //    This is the method that reads the last assigned id from the file lastAssignedClaimId.txt. If the file does not exist, it returns 0.
+
     @Override
     public int readLastAssignedId() {
         try {
@@ -145,7 +154,9 @@ public class claim implements Id_generate, From_String {
             throw new RuntimeException(e);
         }
     }
+
     private int lastAssignedId = readLastAssignedId();
+
     @Override
     public void writeLastAssignedId() {
         try {
@@ -156,6 +167,7 @@ public class claim implements Id_generate, From_String {
             throw new RuntimeException(e);
         }
     }
+
     @Override
     public String generateId() {
         lastAssignedId++;
@@ -163,21 +175,8 @@ public class claim implements Id_generate, From_String {
         return String.format("f-%10d", lastAssignedId);
     }
 
-    @Override
-    public String toString() {
-        return  "{" +
-                "id='" + id + '\'' +
-                ", ClaimDate=" + ClaimDate +
-                ", insuredPerson=" + insuredPerson +
-                ", insuranceCard=" + insuranceCard +
-                ", examDate=" + examDate +
-                ", documents=" + documents +
-                ", claimAmount=" + claimAmount +
-                ", status=" + status +
-                ", BankingInfo='" + BankingInfo + '\'' +
-                '}';
-    }
     // fromString method
+
     @Override
     public void fromString(String line) {
         String[] parts = line.split(", ");
@@ -219,5 +218,20 @@ public class claim implements Id_generate, From_String {
         this.setClaimAmount(claimAmount);
         this.setStatus(status);
         this.setBankingInfo(bankingInfo);
+    }
+
+    @Override
+    public String toString() {
+        return  "{" +
+                "id='" + id + '\'' +
+                ", ClaimDate=" + ClaimDate +
+                ", insuredPerson=" + insuredPerson +
+                ", insuranceCard=" + insuranceCard +
+                ", examDate=" + examDate +
+                ", documents=" + documents +
+                ", claimAmount=" + claimAmount +
+                ", status=" + status +
+                ", BankingInfo='" + BankingInfo + '\'' +
+                '}';
     }
 }

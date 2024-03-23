@@ -10,7 +10,9 @@ public class Load_Save_Data {
     static String claimFileName = "src/Data_folder/claim_data.txt";
     static String dependentFileName = "src/Data_folder/dependent_data.txt";
     static String policyHolderFileName = "src/Data_folder/policyHolder_data.txt";
+
     // create file if not exists
+
     private static void createFileIfNotExists(String fileName) throws IOException {
         File file = new File(fileName);
         if (!file.exists()) {
@@ -19,6 +21,7 @@ public class Load_Save_Data {
     }
 
     // method for load data from file
+
     private static void loadDataFromFiles() {
         try {
             // Load insurance card data
@@ -80,6 +83,7 @@ public class Load_Save_Data {
     }
 
     // load data from file
+
     public static void loadDataFromFilesPublic() throws IOException {
 
         // check if the file exists

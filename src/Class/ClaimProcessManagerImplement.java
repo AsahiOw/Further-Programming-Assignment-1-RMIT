@@ -8,7 +8,9 @@ import java.util.*;
 import static Class.claim.claims;
 
 public class ClaimProcessManagerImplement implements ClaimProcessManager{
+
     //    CRUD for claim
+
     @Override
     public void add(Scanner scanner) throws ParseException {
         System.out.println("Enter the insured person's id: ");

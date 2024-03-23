@@ -9,10 +9,13 @@ import java.util.Scanner;
 
 public class dependent extends customer implements Id_generate, From_String {
     private String policyHolder;
+
     // Define Dependents as a list of dependent objects
+
     public static List<dependent> Dependents = new ArrayList<>();
 
     // default constructor
+
     public dependent() {
     }
 
@@ -22,6 +25,7 @@ public class dependent extends customer implements Id_generate, From_String {
     }
 
     //getters and setters
+
     public String getPolicyHolder() {
         return policyHolder;
     }
@@ -31,11 +35,15 @@ public class dependent extends customer implements Id_generate, From_String {
     }
 
     // method section
+
     // add dependent
+
     public static void addDependent(dependent dependent) {
         Dependents.add(dependent);
     }
+
     // get dependent by id
+
     public static dependent getDependentById(String id) {
         for (dependent dependent : Dependents) {
             if (dependent.getId().equals(id)) {
@@ -44,11 +52,15 @@ public class dependent extends customer implements Id_generate, From_String {
         }
         return null;
     }
+
     // get all dependents
+
     public static List<dependent> getDependents() {
         return Dependents;
     }
+
     // This is the method that reads the last assigned id from the file lastAssignedCustomerId.txt. If the file does not exist, it returns 0.
+
     @Override
     public int readLastAssignedId() {
         try {
@@ -65,7 +77,9 @@ public class dependent extends customer implements Id_generate, From_String {
             return 0;
         }
     }
+
     private int lastAssignedId = readLastAssignedId();
+
     @Override
     public void writeLastAssignedId() {
         try {
@@ -76,13 +90,16 @@ public class dependent extends customer implements Id_generate, From_String {
             e.printStackTrace();
         }
     }
+
     @Override
     public String generateId() {
         lastAssignedId++;
         writeLastAssignedId();
         return String.format("C-%07d", lastAssignedId);
     }
+
     //  CRU overriden methods for dependent
+
     @Override
     public void create_customer(Scanner scanner) {
         System.out.println("Enter the full name of the dependent: ");
@@ -166,16 +183,6 @@ public class dependent extends customer implements Id_generate, From_String {
         }
     }
 
-    @Override
-    public String toString() {
-        return "{" +
-                "id='" + getId() + '\'' +
-                ", fullName='" + getFullName() + '\'' +
-                ", insuranceCard=" + getInsuranceCard() +
-                ", claim=" + getClaims() +
-                ", policyHolder=" + policyHolder +
-                '}';
-    }
     // fromString method
     @Override
     public void fromString(String line) {
@@ -204,5 +211,16 @@ public class dependent extends customer implements Id_generate, From_String {
         this.setInsuranceCard(insuranceCard);
         this.setClaims(claims);
         this.setPolicyHolder(policyHolder);
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id='" + getId() + '\'' +
+                ", fullName='" + getFullName() + '\'' +
+                ", insuranceCard=" + getInsuranceCard() +
+                ", claim=" + getClaims() +
+                ", policyHolder=" + policyHolder +
+                '}';
     }
 }
