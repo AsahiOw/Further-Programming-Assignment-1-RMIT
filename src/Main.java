@@ -1,14 +1,13 @@
 import Class.*;
-import Enum.*;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Scanner;
-import static Class.Load_Save_Data.loadDataFromFiles;
+import static Class.Load_Save_Data.loadDataFromFilesPublic;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        loadDataFromFiles();
+        loadDataFromFilesPublic();
         Scanner scanner = new Scanner(System.in);
         ClaimProcessManagerImplement claimProcessManager = new ClaimProcessManagerImplement();
         String input;
@@ -19,18 +18,18 @@ public class Main {
             System.out.println("What would you like to do?");
             System.out.println("1. Add a new customer");
             System.out.println("2. Update a customer's information");
-            System.out.println("3. Delete a customer");
-            System.out.println("4. Get a customer's information");
-            System.out.println("5. Get all customers' information");
-            System.out.println("6. Add a new claim");
-            System.out.println("7. Update a claim's information");
-            System.out.println("8. Delete a claim");
-            System.out.println("9. Get a claim's information");
-            System.out.println("10. Get all claims' information");
-            System.out.println("11. Add a new insurance card");
-            System.out.println("12. Update an insurance card's information");
-            System.out.println("13. Delete an insurance card");
-            System.out.println("14. Get an insurance card's information");
+            System.out.println("3. Get a customer's information");
+            System.out.println("4. Get all customers' information");
+            System.out.println("5. Add a new claim");
+            System.out.println("6. Update a claim's information");
+            System.out.println("7. Delete a claim");
+            System.out.println("8. Get a claim's information");
+            System.out.println("9. Get all claims' information");
+            System.out.println("10. Add a new insurance card");
+            System.out.println("11. Update an insurance card's information");
+            System.out.println("12. Get an insurance card's information");
+            System.out.println("13. Get all insurance cards' information");
+            System.out.println("14. Check insurance card date");
             System.out.println("15. Exit");
             System.out.print("Enter your choice: ");
 
@@ -43,13 +42,31 @@ public class Main {
                 } else {
                     switch (choice) {
                         case 1:
-                            customer.create_customer(scanner);
+                            System.out.println("1. Add a policy holder");
+                            System.out.println("2. Add a dependent");
+                            System.out.print("Enter your choice: ");
+                            int addCustomerChoice = scanner.nextInt();
+                            scanner.nextLine(); // Consume the newline character
+                            switch (addCustomerChoice) {
+                                case 1:
+                                    policy_holder policyHolderInstance = new policy_holder();
+                                    policyHolderInstance.create_customer(scanner);
+                                    break;
+                                case 2:
+                                    dependent dependentInstance = new dependent();
+                                    dependentInstance.create_customer(scanner);
+                                    break;
+                                default:
+                                    System.out.println("Invalid choice.");
+                                    break;
+                            }
                             break;
                         case 2:
                             System.out.println("1. Update a policy holder's information");
                             System.out.println("2. Update a dependent's information");
                             System.out.print("Enter your choice: ");
                             int updateCustomerChoice = scanner.nextInt();
+                            scanner.nextLine(); // Consume the newline character
                             switch (updateCustomerChoice) {
                                 case 1:
                                     System.out.println("Enter the id of the policy holder you want to update");
@@ -77,41 +94,11 @@ public class Main {
                             }
                             break;
                         case 3:
-                            System.out.println("1. Delete a policy holder");
-                            System.out.println("2. Delete a dependent");
-                            System.out.print("Enter your choice: ");
-                            int deleteCustomerChoice = scanner.nextInt();
-                            switch (deleteCustomerChoice) {
-                                case 1:
-                                    System.out.println("Enter the id of the policy holder you want to delete");
-                                    String id = scanner.nextLine();
-                                    policy_holder policyHolderInstance = policy_holder.getPolicyHolderById(id);
-                                    if (policyHolderInstance != null) {
-                                        policyHolderInstance.delete_customer(scanner);
-                                    } else {
-                                        System.out.println("The policy holder does not exist");
-                                    }
-                                    break;
-                                case 2:
-                                    System.out.println("Enter the id of the dependent you want to delete");
-                                    String dependentId = scanner.nextLine();
-                                    dependent dependentInstance = dependent.getDependentById(dependentId);
-                                    if (dependentInstance != null) {
-                                        dependentInstance.delete_customer(scanner);
-                                    } else {
-                                        System.out.println("The dependent does not exist");
-                                    }
-                                    break;
-                                default:
-                                    System.out.println("Invalid choice.");
-                                    break;
-                            }
-                            break;
-                        case 4:
                             System.out.println("1. Get a policy holder's information");
                             System.out.println("2. Get a dependent's information");
                             System.out.print("Enter your choice: ");
                             int readCustomerChoice = scanner.nextInt();
+                            scanner.nextLine(); // Consume the newline character
                             switch (readCustomerChoice) {
                                 case 1:
                                     System.out.println("Enter the id of the policy holder you want to view");
@@ -138,35 +125,53 @@ public class Main {
                                     break;
                             }
                             break;
-                        case 5:
+                        case 4:
                             customer.read_all_customers();
                             break;
-                        case 6:
+                        case 5:
                             claimProcessManager.add(scanner);
                             break;
-                        case 7:
+                        case 6:
                             claimProcessManager.update(scanner);
                             break;
-                        case 8:
+                        case 7:
                             claimProcessManager.delete(scanner);
                             break;
-                        case 9:
+                        case 8:
                             claimProcessManager.getOne(scanner);
                             break;
-                        case 10:
+                        case 9:
                             claimProcessManager.getAll();
                             break;
-                        case 11:
+                        case 10:
                             insurance_card.create_insurance_card(scanner);
                             break;
-                        case 12:
+                        case 11:
                             insurance_card.update_insurance_card(scanner);
                             break;
+                        case 12:
+                            insurance_card.read_insurance_card(scanner);
+                            break;
                         case 13:
-                            insurance_card.delete_insurance_card(scanner);
+                            insurance_card.read_all_insurance_card();
                             break;
                         case 14:
-                            insurance_card.read_insurance_card(scanner);
+                            System.out.println("1. Read all non-expired insurance cards");
+                            System.out.println("2. Read all expired insurance cards");
+                            System.out.print("Enter your choice: ");
+                            int checkInsuranceCardDateChoice = scanner.nextInt();
+                            scanner.nextLine(); // Consume the newline character
+                            switch (checkInsuranceCardDateChoice) {
+                                case 1:
+                                    insurance_card.read_all_nonexpired_insurance_card();
+                                    break;
+                                case 2:
+                                    insurance_card.read_all_expired_insurance_card();
+                                    break;
+                                default:
+                                    System.out.println("Invalid choice.");
+                                    break;
+                            }
                             break;
                         case 15:
                             Load_Save_Data.saveDataToFile();

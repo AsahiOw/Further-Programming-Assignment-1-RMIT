@@ -10,6 +10,10 @@ public abstract class customer implements Id_generate {
     private int insuranceCard;
     private List<String> claims;
 
+    // default constructor
+    public customer() {
+    }
+
     public customer(String id, String fullName, int insuranceCard, List<String> claims) {
         this.id = id;
         this.fullName = fullName;
@@ -21,6 +25,10 @@ public abstract class customer implements Id_generate {
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getFullName() {
@@ -50,12 +58,12 @@ public abstract class customer implements Id_generate {
     // method section
     // customer CRU
     public static void read_all_customers(){
+        System.out.println("ALL Policy holders");
         for (policy_holder policyHolder : policy_holder.getPolicyHolders()) {
-            System.out.println("ALL Policy holders");
             System.out.println(policyHolder);
         }
+        System.out.println("ALL Dependents");
         for (dependent dependent : dependent.getDependents()) {
-            System.out.println("ALL Dependents");
             System.out.println(dependent);
         }
     }

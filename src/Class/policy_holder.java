@@ -1,15 +1,20 @@
 package Class;
 
+import Interface.From_String;
 import Interface.Id_generate;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class policy_holder extends customer implements Id_generate {
+public class policy_holder extends customer implements Id_generate, From_String {
     private List<String> dependents;
     // Define policyHolders as a list of policy_holder objects
     public static List<policy_holder> policyHolders = new ArrayList<>();
+
+    // default constructor
+    public policy_holder() {
+    }
 
     public policy_holder(String id, String fullName, int insuranceCard, List<String> claims, List<String> dependents) {
         super(id, fullName, insuranceCard, claims);
@@ -83,8 +88,7 @@ public class policy_holder extends customer implements Id_generate {
         System.out.println("Enter the full name of the policy holder: ");
         String fullName = scanner.nextLine();
 
-        System.out.println("Enter the insurance card number of the policy holder: ");
-        int insuranceCard = Integer.parseInt(scanner.nextLine());
+        int insuranceCard = 0000000000;
 
         List<String> claims = new ArrayList<>();
         System.out.println("Enter the claims of the policy holder (separated by comma): ");
@@ -187,27 +191,36 @@ public class policy_holder extends customer implements Id_generate {
                 '}';
     }
     // fromString method
-    public static policy_holder fromString(String line) {
-        String[] parts = line.split(",");
-        String id = parts[0];
-        String fullName = parts[1];
-        int insuranceCard = Integer.parseInt(parts[2]);
+    @Override
+    public void fromString(String line) {
+        String[] parts = line.split(", ");
+
+        String id = parts[0].split("=")[1].replace("'", "");
+        String fullName = parts[1].split("=")[1].replace("'", "");
+        int insuranceCard = Integer.parseInt(parts[2].split("=")[1]);
+
         List<String> claims = new ArrayList<>();
-        if (!parts[3].isEmpty()) {
-            String[] claimsArray = parts[3].split(";");
+        if (parts.length > 3 && !parts[3].split("=")[1].equals("[]")) {
+            String claimsString = parts[3].split("=")[1].replace("[", "").replace("]", "");
+            String[] claimsArray = claimsString.split(", ");
             for (String claim : claimsArray) {
-                claims.add(claim);
+                claims.add(claim.trim());
             }
         }
+
         List<String> dependents = new ArrayList<>();
-        if (!parts[4].isEmpty()) {
-            String[] dependentsArray = parts[4].split(";");
+        if (parts.length > 4 && !parts[4].split("=")[1].equals("[]")) {
+            String dependentsString = parts[4].split("=")[1].replace("[", "").replace("]", "");
+            String[] dependentsArray = dependentsString.split(", ");
             for (String dependent : dependentsArray) {
-                dependents.add(dependent);
+                dependents.add(dependent.trim());
             }
         }
-        policy_holder newPolicyHolder = new policy_holder(id, fullName, insuranceCard, claims, dependents);
-        policyHolders.add(newPolicyHolder);
-        return newPolicyHolder;
+
+        this.setId(id);
+        this.setFullName(fullName);
+        this.setInsuranceCard(insuranceCard);
+        this.setClaims(claims);
+        this.setDependents(dependents);
     }
 }

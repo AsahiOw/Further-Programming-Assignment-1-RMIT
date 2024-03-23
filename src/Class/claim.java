@@ -1,12 +1,15 @@
 package Class;
 
+import Interface.From_String;
 import Interface.Id_generate;
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import Enum.*;
-public class claim implements Id_generate {
+public class claim implements Id_generate, From_String {
     private String id;
     private Date ClaimDate;
     private String insuredPerson;
@@ -18,6 +21,10 @@ public class claim implements Id_generate {
     private String BankingInfo;
     // Define Dependents as a list of dependent objects
     public static List<claim> claims = new ArrayList<>();
+
+    // default constructor
+    public claim() {
+    }
 
     public claim(String id, Date claimDate, String insuredPerson, int insuranceCard, Date examDate, List<String> documents, double claimAmount, allStatus status, String bankingInfo) {
         this.id = id;
@@ -35,6 +42,11 @@ public class claim implements Id_generate {
     public String getId() {
         return id;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public Date getClaimDate() {
         return ClaimDate;
     }
@@ -166,20 +178,46 @@ public class claim implements Id_generate {
                 '}';
     }
     // fromString method
-    public static claim fromString(String line) {
-        String[] fields = line.split(",");
-        String id = fields[0];
-        Date ClaimDate = new Date(fields[1]);
-        String insuredPerson = fields[2];
-        int insuranceCard = Integer.parseInt(fields[3]);
-        Date examDate = new Date(fields[4]);
-        List<String> documents = new ArrayList<>();
-        for (String document : fields[5].split(";")) {
-            documents.add(document);
+    @Override
+    public void fromString(String line) {
+        String[] parts = line.split(", ");
+        String id = parts[0].split("=")[1].replace("'", "");
+        Date claimDate = null;
+        try {
+            claimDate = new SimpleDateFormat("yyyy-MM-dd").parse(parts[1].split("=")[1]);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
         }
-        double claimAmount = Double.parseDouble(fields[6]);
-        allStatus status = allStatus.valueOf(fields[7]);
-        String BankingInfo = fields[8];
-        return new claim(id, ClaimDate, insuredPerson, insuranceCard, examDate, documents, claimAmount, status, BankingInfo);
+        String insuredPerson = parts[2].split("=")[1].replace("'", "");
+        int insuranceCard = Integer.parseInt(parts[3].split("=")[1]);
+
+        Date examDate = null;
+        try {
+            examDate = new SimpleDateFormat("yyyy-MM-dd").parse(parts[4].split("=")[1]);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        List<String> documents = new ArrayList<>();
+        if (!parts[5].split("=")[1].equals("[]")) {
+            String[] documentsArray = parts[5].split("=")[1].replace("[", "").replace("]", "").split(", ");
+            for (String document : documentsArray) {
+                documents.add(document.trim());
+            }
+        }
+
+        double claimAmount = Double.parseDouble(parts[6].split("=")[1]);
+        allStatus status = allStatus.valueOf(parts[7].split("=")[1].replace("'", ""));
+        String bankingInfo = parts[8].split("=")[1].replace("'", "");
+
+        this.setId(id);
+        this.setClaimDate(claimDate);
+        this.setInsuredPerson(insuredPerson);
+        this.setInsuranceCard(insuranceCard);
+        this.setExamDate(examDate);
+        this.setDocuments(documents);
+        this.setClaimAmount(claimAmount);
+        this.setStatus(status);
+        this.setBankingInfo(bankingInfo);
     }
 }
