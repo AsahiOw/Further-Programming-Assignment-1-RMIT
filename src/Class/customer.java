@@ -70,7 +70,7 @@ public abstract class customer implements Id_generate {
 
     // abstract methods
     public abstract void create_customer(Scanner scanner);
-    public abstract void update_customer(Scanner scanner);
-    public abstract void read_customer(Scanner scanner);
+    public abstract void update_customer(String ids, Scanner scanner);
+    public abstract void read_customer(String ids);
 
 }

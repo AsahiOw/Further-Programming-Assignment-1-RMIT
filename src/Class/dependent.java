@@ -111,9 +111,8 @@ public class dependent extends customer implements Id_generate, From_String {
     }
 
     @Override
-    public void update_customer(Scanner scanner) {
-        System.out.println("Enter the ID of the dependent you want to update: ");
-        String id = scanner.nextLine();
+    public void update_customer(String ids, Scanner scanner) {
+        String id = ids;
         dependent dependentToUpdate = getDependentById(id);
         if (dependentToUpdate != null) {
             System.out.println("Enter the new full name of the dependent (or press Enter to skip): ");
@@ -153,9 +152,8 @@ public class dependent extends customer implements Id_generate, From_String {
     }
 
     @Override
-    public void read_customer(Scanner scanner) {
-        System.out.println("Enter the ID of the dependent you want to view: ");
-        String id = scanner.nextLine();
+    public void read_customer(String ids) {
+        String id = ids;
         dependent dependentToView = getDependentById(id);
         if (dependentToView != null) {
             System.out.println("Dependent ID: " + dependentToView.getId());
@@ -181,7 +179,7 @@ public class dependent extends customer implements Id_generate, From_String {
     // fromString method
     @Override
     public void fromString(String line) {
-        String[] parts = line.split(", ");
+        String[] parts = line.split(",(?![^\\[]*\\])");
 
         String id = parts[0].split("=")[1].replace("'", "");
         String fullName = parts[1].split("=")[1].replace("'", "");
@@ -197,8 +195,8 @@ public class dependent extends customer implements Id_generate, From_String {
         }
 
         String policyHolder = "";
-        if (parts.length > 4) {
-            policyHolder = parts[4].split("=")[1].replace("'", "");
+        if (parts.length > 4 && parts[4].contains("=") && parts[4].split("=").length > 1 && !parts[4].split("=")[1].equals("[]")) {
+            policyHolder = parts[4].split("=")[1].replace("[", "").replace("]", "").trim().replaceAll("\\]$", "").replaceAll("\\}$", "");
         }
 
         this.setId(id);

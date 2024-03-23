@@ -4,6 +4,7 @@ import Interface.From_String;
 import Interface.Id_generate;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -118,9 +119,8 @@ public class policy_holder extends customer implements Id_generate, From_String 
     }
 
     @Override
-    public void update_customer(Scanner scanner) {
-        System.out.println("Enter the ID of the policy holder you want to update: ");
-        String id = scanner.nextLine();
+    public void update_customer(String ids, Scanner scanner) {
+        String id = ids;
         policy_holder policyHolderToUpdate = getPolicyHolderById(id);
         if (policyHolderToUpdate != null) {
             System.out.println("Enter the new full name of the policy holder (or press Enter to skip): ");
@@ -165,9 +165,8 @@ public class policy_holder extends customer implements Id_generate, From_String 
     }
 
     @Override
-    public void read_customer(Scanner scanner) {
-        System.out.println("Enter the ID of the policy holder you want to view: ");
-        String id = scanner.nextLine();
+    public void read_customer(String ids) {
+        String id = ids;
         policy_holder policyHolderToView = getPolicyHolderById(id);
         if (policyHolderToView != null) {
             System.out.println("Policy Holder ID: " + policyHolderToView.getId());
@@ -193,7 +192,7 @@ public class policy_holder extends customer implements Id_generate, From_String 
     // fromString method
     @Override
     public void fromString(String line) {
-        String[] parts = line.split(", ");
+        String[] parts = line.split(",(?![^\\[]*\\])");
 
         String id = parts[0].split("=")[1].replace("'", "");
         String fullName = parts[1].split("=")[1].replace("'", "");
@@ -209,8 +208,8 @@ public class policy_holder extends customer implements Id_generate, From_String 
         }
 
         List<String> dependents = new ArrayList<>();
-        if (parts.length > 4 && !parts[4].split("=")[1].equals("[]")) {
-            String dependentsString = parts[4].split("=")[1].replace("[", "").replace("]", "");
+        if (parts.length > 4 && parts[4].contains("=") && parts[4].split("=").length > 1 && !parts[4].split("=")[1].equals("[]")) {
+            String dependentsString = parts[4].split("=")[1].replace("[", "").replace("]", "").trim().replaceAll("\\]$", "").replaceAll("\\}$", "");
             String[] dependentsArray = dependentsString.split(", ");
             for (String dependent : dependentsArray) {
                 dependents.add(dependent.trim());
