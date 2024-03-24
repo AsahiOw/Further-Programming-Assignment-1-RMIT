@@ -171,16 +171,23 @@ public class ClaimProcessManagerImplement implements ClaimProcessManager{
     public claim getOne(Scanner scanner) {
         System.out.println("Enter the ID of the claim you want to view: ");
         String claimId = scanner.nextLine();
+        System.out.println("Searching for claim with ID: " + claimId);
         claim existingClaim = claim.getClaimById(claimId);
         if (existingClaim == null) {
             System.out.println("No claim found with the provided ID.");
             return null;
+        } else {
+            System.out.println(existingClaim);
         }
         return existingClaim;
     }
 
     @Override
     public List<claim> getAll() {
+        System.out.println("Total number of claims: " + claims.size());
+        for (claim claim : claims) {
+            System.out.println(claim);
+        }
         return claims;
     }
 }

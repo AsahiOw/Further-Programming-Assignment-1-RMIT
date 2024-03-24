@@ -259,7 +259,8 @@ public class insurance_card implements Id_generate, From_String {
 
     @Override
     public void fromString(String line) {
-        String[] parts = line.split(", ");
+        String[] parts = line.split(",(?![^\\[]*\\])");
+
         int id = Integer.parseInt(parts[0].split("=")[1]);
         String customer = parts[1].split("=")[1].replace("'", "");
         String policyOwner = parts[2].split("=")[1].replace("'", "");
@@ -267,7 +268,8 @@ public class insurance_card implements Id_generate, From_String {
         Date expirationDate = null;
         if (!parts[3].split("=")[1].equals("null")) {
             try {
-                expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse(parts[3].split("=")[1]);
+                String expirationDateString = parts[3].split("=")[1].replaceAll("\\}$", "");
+                expirationDate = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(expirationDateString);
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }

@@ -1,7 +1,7 @@
 package Enum;
 
 public enum allStatus {
-    New,
-    Processing,
-    Done
+    NEW,
+    PROCESSING,
+    DONE
 }
