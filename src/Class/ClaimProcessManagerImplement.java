@@ -1,3 +1,6 @@
+/**
+ * @author <Nguyen Ha Tuan Nguyen - s3978072>
+ */
 package Class;
 import Interface.ClaimProcessManager;
 import Enum.allStatus;

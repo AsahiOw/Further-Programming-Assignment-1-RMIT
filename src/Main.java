@@ -1,3 +1,6 @@
+/**
+ * @author <Nguyen Ha Tuan Nguyen - s3978072>
+ */
 import Class.*;
 
 import java.io.IOException;
