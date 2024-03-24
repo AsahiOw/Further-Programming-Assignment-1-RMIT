@@ -23,6 +23,7 @@ public class claim implements Id_generate, From_String {
     public static List<claim> claims = new ArrayList<>();
 
     // default constructor
+
     public claim() {
     }
 
@@ -112,11 +113,15 @@ public class claim implements Id_generate, From_String {
     }
 
     // method section
+
     // add claim
+
     public static void addClaim(claim claim) {
         claims.add(claim);
     }
+
     // get Claim by id
+
     public static claim getClaimById(String id) {
         for (claim claim : claims) {
             if (claim.getId().equals(id)) {
@@ -125,11 +130,15 @@ public class claim implements Id_generate, From_String {
         }
         return null;
     }
+
     // get all claims
+
     public static List<claim> getClaims() {
         return claims;
     }
+
     //    This is the method that reads the last assigned id from the file lastAssignedClaimId.txt. If the file does not exist, it returns 0.
+
     @Override
     public int readLastAssignedId() {
         try {
@@ -145,7 +154,9 @@ public class claim implements Id_generate, From_String {
             throw new RuntimeException(e);
         }
     }
+
     private int lastAssignedId = readLastAssignedId();
+
     @Override
     public void writeLastAssignedId() {
         try {
@@ -156,51 +167,45 @@ public class claim implements Id_generate, From_String {
             throw new RuntimeException(e);
         }
     }
+
     @Override
     public String generateId() {
         lastAssignedId++;
         writeLastAssignedId();
-        return String.format("f-%10d", lastAssignedId);
+        return String.format("f-%010d", lastAssignedId);
     }
 
-    @Override
-    public String toString() {
-        return  "{" +
-                "id='" + id + '\'' +
-                ", ClaimDate=" + ClaimDate +
-                ", insuredPerson=" + insuredPerson +
-                ", insuranceCard=" + insuranceCard +
-                ", examDate=" + examDate +
-                ", documents=" + documents +
-                ", claimAmount=" + claimAmount +
-                ", status=" + status +
-                ", BankingInfo='" + BankingInfo + '\'' +
-                '}';
-    }
     // fromString method
+
     @Override
     public void fromString(String line) {
-        String[] parts = line.split(", ");
+        String[] parts = line.split(",(?![^\\[]*\\])");
+
         String id = parts[0].split("=")[1].replace("'", "");
+
         Date claimDate = null;
         try {
-            claimDate = new SimpleDateFormat("yyyy-MM-dd").parse(parts[1].split("=")[1]);
+            String claimDateString = parts[1].split("=")[1].replaceAll("\\}$", "");
+            claimDate = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(claimDateString);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+
         String insuredPerson = parts[2].split("=")[1].replace("'", "");
         int insuranceCard = Integer.parseInt(parts[3].split("=")[1]);
 
         Date examDate = null;
         try {
-            examDate = new SimpleDateFormat("yyyy-MM-dd").parse(parts[4].split("=")[1]);
+            String examDateString = parts[4].split("=")[1].replaceAll("\\}$", "");
+            examDate = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(examDateString);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
 
         List<String> documents = new ArrayList<>();
         if (!parts[5].split("=")[1].equals("[]")) {
-            String[] documentsArray = parts[5].split("=")[1].replace("[", "").replace("]", "").split(", ");
+            String documentsString = parts[5].split("=")[1].replace("[", "").replace("]", "").trim().replaceAll("\\]$", "").replaceAll("\\}$", "");
+            String[] documentsArray = documentsString.split(", ");
             for (String document : documentsArray) {
                 documents.add(document.trim());
             }
@@ -219,5 +224,20 @@ public class claim implements Id_generate, From_String {
         this.setClaimAmount(claimAmount);
         this.setStatus(status);
         this.setBankingInfo(bankingInfo);
+    }
+
+    @Override
+    public String toString() {
+        return  "{" +
+                "id='" + id + '\'' +
+                ", ClaimDate=" + ClaimDate +
+                ", insuredPerson=" + insuredPerson +
+                ", insuranceCard=" + insuranceCard +
+                ", examDate=" + examDate +
+                ", documents=" + documents +
+                ", claimAmount=" + claimAmount +
+                ", status=" + status +
+                ", BankingInfo='" + BankingInfo + '\'' +
+                '}';
     }
 }

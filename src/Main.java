@@ -70,10 +70,10 @@ public class Main {
                             switch (updateCustomerChoice) {
                                 case 1:
                                     System.out.println("Enter the id of the policy holder you want to update");
-                                    String id = scanner.nextLine();
-                                    policy_holder policyHolderInstance = policy_holder.getPolicyHolderById(id);
+                                    String policyholderid = scanner.nextLine();
+                                    policy_holder policyHolderInstance = policy_holder.getPolicyHolderById(policyholderid);
                                     if (policyHolderInstance != null) {
-                                        policyHolderInstance.update_customer(scanner);
+                                        policyHolderInstance.update_customer(policyholderid, scanner);
                                     } else {
                                         System.out.println("The policy holder does not exist");
                                     }
@@ -83,7 +83,7 @@ public class Main {
                                     String dependentId = scanner.nextLine();
                                     dependent dependentInstance = dependent.getDependentById(dependentId);
                                     if (dependentInstance != null) {
-                                        dependentInstance.update_customer(scanner);
+                                        dependentInstance.update_customer(dependentId, scanner);
                                     } else {
                                         System.out.println("The dependent does not exist");
                                     }
@@ -102,10 +102,10 @@ public class Main {
                             switch (readCustomerChoice) {
                                 case 1:
                                     System.out.println("Enter the id of the policy holder you want to view");
-                                    String id = scanner.nextLine();
-                                    policy_holder policyHolderInstance = policy_holder.getPolicyHolderById(id);
+                                    String policyholderid = scanner.nextLine();
+                                    policy_holder policyHolderInstance = policy_holder.getPolicyHolderById(policyholderid);
                                     if (policyHolderInstance != null) {
-                                        policyHolderInstance.read_customer(scanner);
+                                        policyHolderInstance.read_customer(policyholderid);
                                     } else {
                                         System.out.println("The policy holder does not exist");
                                     }
@@ -115,7 +115,7 @@ public class Main {
                                     String dependentId = scanner.nextLine();
                                     dependent dependentInstance = dependent.getDependentById(dependentId);
                                     if (dependentInstance != null) {
-                                        dependentInstance.read_customer(scanner);
+                                        dependentInstance.read_customer(dependentId);
                                     } else {
                                         System.out.println("The dependent does not exist");
                                     }

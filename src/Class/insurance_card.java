@@ -15,10 +15,13 @@ public class insurance_card implements Id_generate, From_String {
     private String customer;
     private String policyOwner;
     private Date expirationDate;
+
     // Define insuranceCards as a list of insurance_card objects
+
     public static List<insurance_card> insuranceCards = new ArrayList<>();
 
     // default constructor
+
     public insurance_card() {
     }
 
@@ -30,6 +33,7 @@ public class insurance_card implements Id_generate, From_String {
     }
 
     //getters and setters
+
     public int getId() {
         return id;
     }
@@ -63,15 +67,21 @@ public class insurance_card implements Id_generate, From_String {
     }
 
     // method section
+
     // add insurance card
+
     public static void addInsuranceCard(insurance_card insuranceCard) {
         insuranceCards.add(insuranceCard);
     }
+
     // get all claims
+
     public static List<insurance_card> getInsuranceCards() {
         return insuranceCards;
     }
+
     // This is the method that reads the last assigned id from the file lastAssignedInsuranceId.txt. If the file does not exist, it returns 0.
+
     @Override
     public int readLastAssignedId() {
         try {
@@ -87,7 +97,9 @@ public class insurance_card implements Id_generate, From_String {
             throw new RuntimeException(e);
         }
     }
+
     private int lastAssignedId = readLastAssignedId();
+
     @Override
     public void writeLastAssignedId() {
         try {
@@ -98,6 +110,7 @@ public class insurance_card implements Id_generate, From_String {
             throw new RuntimeException(e);
         }
     }
+
     @Override
     public String generateId() {
         lastAssignedId++;
@@ -107,7 +120,9 @@ public class insurance_card implements Id_generate, From_String {
         writeLastAssignedId();
         return String.valueOf(lastAssignedId);
     }
+
     // get insurance card by id
+
     public static insurance_card getInsuranceCardById(int id){
         for (insurance_card insuranceCard : insuranceCards) {
             if(insuranceCard.getId() == id){
@@ -116,7 +131,9 @@ public class insurance_card implements Id_generate, From_String {
         }
         return null;
     }
+
     // CRU for insurance card
+
     public static void create_insurance_card(Scanner scanner) throws ParseException {
         System.out.println("Enter the ID of the customer: ");
         String customerId = scanner.nextLine();
@@ -238,19 +255,12 @@ public class insurance_card implements Id_generate, From_String {
         }
     }
 
-    @Override
-    public String toString() {
-        return "{" +
-                "id=" + id +
-                ", customer='" + customer +
-                ", policyOwner=" + policyOwner +
-                ", expirationDate=" + expirationDate +
-                '}';
-    }
     // fromString method
+
     @Override
     public void fromString(String line) {
-        String[] parts = line.split(", ");
+        String[] parts = line.split(",(?![^\\[]*\\])");
+
         int id = Integer.parseInt(parts[0].split("=")[1]);
         String customer = parts[1].split("=")[1].replace("'", "");
         String policyOwner = parts[2].split("=")[1].replace("'", "");
@@ -258,7 +268,8 @@ public class insurance_card implements Id_generate, From_String {
         Date expirationDate = null;
         if (!parts[3].split("=")[1].equals("null")) {
             try {
-                expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse(parts[3].split("=")[1]);
+                String expirationDateString = parts[3].split("=")[1].replaceAll("\\}$", "");
+                expirationDate = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(expirationDateString);
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
@@ -268,5 +279,15 @@ public class insurance_card implements Id_generate, From_String {
         this.setCustomer(customer);
         this.setPolicyOwner(policyOwner);
         this.setExpirationDate(expirationDate);
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + id +
+                ", customer='" + customer +
+                ", policyOwner=" + policyOwner +
+                ", expirationDate=" + expirationDate +
+                '}';
     }
 }

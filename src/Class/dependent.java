@@ -9,10 +9,13 @@ import java.util.Scanner;
 
 public class dependent extends customer implements Id_generate, From_String {
     private String policyHolder;
+
     // Define Dependents as a list of dependent objects
+
     public static List<dependent> Dependents = new ArrayList<>();
 
     // default constructor
+
     public dependent() {
     }
 
@@ -22,6 +25,7 @@ public class dependent extends customer implements Id_generate, From_String {
     }
 
     //getters and setters
+
     public String getPolicyHolder() {
         return policyHolder;
     }
@@ -31,11 +35,15 @@ public class dependent extends customer implements Id_generate, From_String {
     }
 
     // method section
+
     // add dependent
+
     public static void addDependent(dependent dependent) {
         Dependents.add(dependent);
     }
+
     // get dependent by id
+
     public static dependent getDependentById(String id) {
         for (dependent dependent : Dependents) {
             if (dependent.getId().equals(id)) {
@@ -44,11 +52,15 @@ public class dependent extends customer implements Id_generate, From_String {
         }
         return null;
     }
+
     // get all dependents
+
     public static List<dependent> getDependents() {
         return Dependents;
     }
+
     // This is the method that reads the last assigned id from the file lastAssignedCustomerId.txt. If the file does not exist, it returns 0.
+
     @Override
     public int readLastAssignedId() {
         try {
@@ -65,7 +77,9 @@ public class dependent extends customer implements Id_generate, From_String {
             return 0;
         }
     }
+
     private int lastAssignedId = readLastAssignedId();
+
     @Override
     public void writeLastAssignedId() {
         try {
@@ -76,13 +90,16 @@ public class dependent extends customer implements Id_generate, From_String {
             e.printStackTrace();
         }
     }
+
     @Override
     public String generateId() {
         lastAssignedId++;
         writeLastAssignedId();
         return String.format("C-%07d", lastAssignedId);
     }
+
     //  CRU overriden methods for dependent
+
     @Override
     public void create_customer(Scanner scanner) {
         System.out.println("Enter the full name of the dependent: ");
@@ -111,9 +128,8 @@ public class dependent extends customer implements Id_generate, From_String {
     }
 
     @Override
-    public void update_customer(Scanner scanner) {
-        System.out.println("Enter the ID of the dependent you want to update: ");
-        String id = scanner.nextLine();
+    public void update_customer(String ids, Scanner scanner) {
+        String id = ids;
         dependent dependentToUpdate = getDependentById(id);
         if (dependentToUpdate != null) {
             System.out.println("Enter the new full name of the dependent (or press Enter to skip): ");
@@ -153,9 +169,8 @@ public class dependent extends customer implements Id_generate, From_String {
     }
 
     @Override
-    public void read_customer(Scanner scanner) {
-        System.out.println("Enter the ID of the dependent you want to view: ");
-        String id = scanner.nextLine();
+    public void read_customer(String ids) {
+        String id = ids;
         dependent dependentToView = getDependentById(id);
         if (dependentToView != null) {
             System.out.println("Dependent ID: " + dependentToView.getId());
@@ -168,20 +183,10 @@ public class dependent extends customer implements Id_generate, From_String {
         }
     }
 
-    @Override
-    public String toString() {
-        return "{" +
-                "id='" + getId() + '\'' +
-                ", fullName='" + getFullName() + '\'' +
-                ", insuranceCard=" + getInsuranceCard() +
-                ", claim=" + getClaims() +
-                ", policyHolder=" + policyHolder +
-                '}';
-    }
     // fromString method
     @Override
     public void fromString(String line) {
-        String[] parts = line.split(", ");
+        String[] parts = line.split(",(?![^\\[]*\\])");
 
         String id = parts[0].split("=")[1].replace("'", "");
         String fullName = parts[1].split("=")[1].replace("'", "");
@@ -197,8 +202,8 @@ public class dependent extends customer implements Id_generate, From_String {
         }
 
         String policyHolder = "";
-        if (parts.length > 4) {
-            policyHolder = parts[4].split("=")[1].replace("'", "");
+        if (parts.length > 4 && parts[4].contains("=") && parts[4].split("=").length > 1 && !parts[4].split("=")[1].equals("[]")) {
+            policyHolder = parts[4].split("=")[1].replace("[", "").replace("]", "").trim().replaceAll("\\]$", "").replaceAll("\\}$", "");
         }
 
         this.setId(id);
@@ -206,5 +211,16 @@ public class dependent extends customer implements Id_generate, From_String {
         this.setInsuranceCard(insuranceCard);
         this.setClaims(claims);
         this.setPolicyHolder(policyHolder);
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id='" + getId() + '\'' +
+                ", fullName='" + getFullName() + '\'' +
+                ", insuranceCard=" + getInsuranceCard() +
+                ", claim=" + getClaims() +
+                ", policyHolder=" + policyHolder +
+                '}';
     }
 }

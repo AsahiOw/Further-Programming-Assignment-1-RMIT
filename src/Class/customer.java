@@ -11,6 +11,7 @@ public abstract class customer implements Id_generate {
     private List<String> claims;
 
     // default constructor
+
     public customer() {
     }
 
@@ -56,7 +57,9 @@ public abstract class customer implements Id_generate {
     }
 
     // method section
+
     // customer CRU
+
     public static void read_all_customers(){
         System.out.println("ALL Policy holders");
         for (policy_holder policyHolder : policy_holder.getPolicyHolders()) {
@@ -70,7 +73,7 @@ public abstract class customer implements Id_generate {
 
     // abstract methods
     public abstract void create_customer(Scanner scanner);
-    public abstract void update_customer(Scanner scanner);
-    public abstract void read_customer(Scanner scanner);
+    public abstract void update_customer(String ids, Scanner scanner);
+    public abstract void read_customer(String ids);
 
 }

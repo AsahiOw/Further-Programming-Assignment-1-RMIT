@@ -1,9 +1,6 @@
 package Class;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Scanner;
 
 
@@ -13,7 +10,9 @@ public class Load_Save_Data {
     static String claimFileName = "src/Data_folder/claim_data.txt";
     static String dependentFileName = "src/Data_folder/dependent_data.txt";
     static String policyHolderFileName = "src/Data_folder/policyHolder_data.txt";
+
     // create file if not exists
+
     private static void createFileIfNotExists(String fileName) throws IOException {
         File file = new File(fileName);
         if (!file.exists()) {
@@ -22,6 +21,7 @@ public class Load_Save_Data {
     }
 
     // method for load data from file
+
     private static void loadDataFromFiles() {
         try {
             // Load insurance card data
@@ -51,17 +51,17 @@ public class Load_Save_Data {
             claimScanner.close();
 
             // Load policy holder data
-            File pollicyHolderFile = new File(policyHolderFileName);
-            Scanner pollicyHolderScanner = new Scanner(pollicyHolderFile);
-            while (pollicyHolderScanner.hasNextLine()) {
-                String line = pollicyHolderScanner.nextLine();
+            File policyHolderFile = new File(policyHolderFileName);
+            Scanner policyHolderScanner = new Scanner(policyHolderFile);
+            while (policyHolderScanner.hasNextLine()) {
+                String line = policyHolderScanner.nextLine();
                 policy_holder policyHolder = new policy_holder();
                 policyHolder.fromString(line);
                 if (policyHolder != null) {
                     policy_holder.addPolicyHolder(policyHolder);
                 }
             }
-            pollicyHolderScanner.close();
+            policyHolderScanner.close();
 
             // Load dependent data
             File dependentFile = new File(dependentFileName);
@@ -74,12 +74,16 @@ public class Load_Save_Data {
                     dependent.addDependent(Dependent);
                 }
             }
+            dependentScanner.close();
         } catch (FileNotFoundException e) {
             System.out.println("Error loading data from file: " + e.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
     // load data from file
+
     public static void loadDataFromFilesPublic() throws IOException {
 
         // check if the file exists
