@@ -7,7 +7,6 @@ import Interface.From_String;
 import Interface.Id_generate;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -59,6 +58,7 @@ public class policy_holder extends customer implements Id_generate, From_String 
     }
 
     // get all policy holders
+
     public static List<policy_holder> getPolicyHolders() {
         return policyHolders;
     }

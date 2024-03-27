@@ -22,7 +22,9 @@ public class claim implements Id_generate, From_String {
     private double claimAmount;
     private allStatus status;
     private String BankingInfo;
+
     // Define Dependents as a list of dependent objects
+
     public static List<claim> claims = new ArrayList<>();
 
     // default constructor
