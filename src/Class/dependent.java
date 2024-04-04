@@ -108,7 +108,7 @@ public class dependent extends customer implements Id_generate, From_String {
         System.out.println("Enter the full name of the dependent: ");
         String fullName = scanner.nextLine();
 
-        int insuranceCard = 0000000000;
+        int insuranceCard = 0;
 
         List<String> claims = new ArrayList<>();
         System.out.println("Enter the claims of the dependent (separated by comma): ");

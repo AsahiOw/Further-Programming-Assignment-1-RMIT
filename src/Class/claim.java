@@ -53,64 +53,32 @@ public class claim implements Id_generate, From_String {
         this.id = id;
     }
 
-    public Date getClaimDate() {
-        return ClaimDate;
-    }
-
     public void setClaimDate(Date claimDate) {
         ClaimDate = claimDate;
-    }
-
-    public String getInsuredPerson() {
-        return insuredPerson;
     }
 
     public void setInsuredPerson(String insuredPerson) {
         this.insuredPerson = insuredPerson;
     }
 
-    public int getInsuranceCard() {
-        return insuranceCard;
-    }
-
     public void setInsuranceCard(int insuranceCard) {
         this.insuranceCard = insuranceCard;
-    }
-
-    public Date getExamDate() {
-        return examDate;
     }
 
     public void setExamDate(Date examDate) {
         this.examDate = examDate;
     }
 
-    public List<String> getDocuments() {
-        return documents;
-    }
-
     public void setDocuments(List<String> documents) {
         this.documents = documents;
-    }
-
-    public double getClaimAmount() {
-        return claimAmount;
     }
 
     public void setClaimAmount(double claimAmount) {
         this.claimAmount = claimAmount;
     }
 
-    public allStatus getStatus() {
-        return status;
-    }
-
     public void setStatus(allStatus status) {
         this.status = status;
-    }
-
-    public String getBankingInfo() {
-        return BankingInfo;
     }
 
     public void setBankingInfo(String bankingInfo) {

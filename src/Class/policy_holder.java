@@ -109,7 +109,7 @@ public class policy_holder extends customer implements Id_generate, From_String 
         System.out.println("Enter the full name of the policy holder: ");
         String fullName = scanner.nextLine();
 
-        int insuranceCard = 0000000000;
+        int insuranceCard = 0;
 
         List<String> claims = new ArrayList<>();
         System.out.println("Enter the claims of the policy holder (separated by comma): ");

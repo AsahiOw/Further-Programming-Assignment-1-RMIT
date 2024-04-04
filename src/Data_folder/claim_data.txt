@@ -1,1 +1,1 @@
-{id='f-0000000003', ClaimDate=Sun Oct 23 00:00:00 ICT 1233, insuredPerson=123, insuranceCard=123, examDate=Sat Oct 01 00:00:00 ICT 1233, documents=[123123, 123], claimAmount=123.0, status=NEW, BankingInfo='123123123'}
+{id='f-0000000003', ClaimDate=Sun Oct 23 00:00:00 ICT 1233, insuredPerson=123, insuranceCard=123, examDate=Sat Oct 01 00:00:00 ICT 1233, documents=[123123, 123], claimAmount=123.0, status=NEW, BankingInfo='123123123}}}}'}

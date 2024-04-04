@@ -117,11 +117,8 @@ public class insurance_card implements Id_generate, From_String {
     @Override
     public String generateId() {
         lastAssignedId++;
-        while (String.valueOf(lastAssignedId).length() < 10) {
-            lastAssignedId *= 10;
-        }
         writeLastAssignedId();
-        return String.valueOf(lastAssignedId);
+        return String.format("%010d", lastAssignedId);
     }
 
     // get insurance card by id

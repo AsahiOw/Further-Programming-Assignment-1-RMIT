@@ -11,13 +11,13 @@ import static Class.Load_Save_Data.loadDataFromFilesPublic;
 public class Main {
     public static void main(String[] args) throws IOException {
         loadDataFromFilesPublic();
+        System.out.println("Welcome to the Insurance Management System");
+        System.out.println("(Note: Please exit the system properly to prevent data compomised.)");
         Scanner scanner = new Scanner(System.in);
         ClaimProcessManagerImplement claimProcessManager = new ClaimProcessManagerImplement();
         String input;
         int choice;
         do {
-            System.out.println("Welcome to the Insurance Management System");
-            System.out.println("(Note: Please make sure to Exit the system properly to save your data.)");
             System.out.println("What would you like to do?");
             System.out.println("1. Add a new customer");
             System.out.println("2. Update a customer's information");
@@ -54,10 +54,14 @@ public class Main {
                                 case 1:
                                     policy_holder policyHolderInstance = new policy_holder();
                                     policyHolderInstance.create_customer(scanner);
+                                    Load_Save_Data.saveDataToFile();
+                                    System.out.println("System saved");
                                     break;
                                 case 2:
                                     dependent dependentInstance = new dependent();
                                     dependentInstance.create_customer(scanner);
+                                    Load_Save_Data.saveDataToFile();
+                                    System.out.println("System saved");
                                     break;
                                 default:
                                     System.out.println("Invalid choice.");
@@ -77,6 +81,8 @@ public class Main {
                                     policy_holder policyHolderInstance = policy_holder.getPolicyHolderById(policyholderid);
                                     if (policyHolderInstance != null) {
                                         policyHolderInstance.update_customer(policyholderid, scanner);
+                                        Load_Save_Data.saveDataToFile();
+                                        System.out.println("System saved");
                                     } else {
                                         System.out.println("The policy holder does not exist");
                                     }
@@ -87,6 +93,8 @@ public class Main {
                                     dependent dependentInstance = dependent.getDependentById(dependentId);
                                     if (dependentInstance != null) {
                                         dependentInstance.update_customer(dependentId, scanner);
+                                        Load_Save_Data.saveDataToFile();
+                                        System.out.println("System saved");
                                     } else {
                                         System.out.println("The dependent does not exist");
                                     }
@@ -133,12 +141,18 @@ public class Main {
                             break;
                         case 5:
                             claimProcessManager.add(scanner);
+                            Load_Save_Data.saveDataToFile();
+                            System.out.println("System saved");
                             break;
                         case 6:
                             claimProcessManager.update(scanner);
+                            Load_Save_Data.saveDataToFile();
+                            System.out.println("System saved");
                             break;
                         case 7:
                             claimProcessManager.delete(scanner);
+                            Load_Save_Data.saveDataToFile();
+                            System.out.println("System saved");
                             break;
                         case 8:
                             claimProcessManager.getOne(scanner);
@@ -148,9 +162,13 @@ public class Main {
                             break;
                         case 10:
                             insurance_card.create_insurance_card(scanner);
+                            Load_Save_Data.saveDataToFile();
+                            System.out.println("System saved");
                             break;
                         case 11:
                             insurance_card.update_insurance_card(scanner);
+                            Load_Save_Data.saveDataToFile();
+                            System.out.println("System saved");
                             break;
                         case 12:
                             insurance_card.read_insurance_card(scanner);
@@ -178,6 +196,7 @@ public class Main {
                             break;
                         case 15:
                             Load_Save_Data.saveDataToFile();
+                            System.out.println("System saved");
                             System.out.println("Exiting the system...");
                             break;
                     }
