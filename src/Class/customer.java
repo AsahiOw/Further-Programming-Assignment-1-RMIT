@@ -10,7 +10,7 @@ import java.util.Scanner;
 public abstract class customer implements Id_generate {
     private String id;
     private String fullName;
-    private int insuranceCard;
+    private String insuranceCard;
     private List<String> claims;
 
     // default constructor
@@ -18,7 +18,7 @@ public abstract class customer implements Id_generate {
     public customer() {
     }
 
-    public customer(String id, String fullName, int insuranceCard, List<String> claims) {
+    public customer(String id, String fullName, String insuranceCard, List<String> claims) {
         this.id = id;
         this.fullName = fullName;
         this.insuranceCard = insuranceCard;
@@ -43,11 +43,11 @@ public abstract class customer implements Id_generate {
         this.fullName = fullName;
     }
 
-    public int getInsuranceCard() {
+    public String getInsuranceCard() {
         return insuranceCard;
     }
 
-    public void setInsuranceCard(int insuranceCard) {
+    public void setInsuranceCard(String insuranceCard) {
         this.insuranceCard = insuranceCard;
     }
 

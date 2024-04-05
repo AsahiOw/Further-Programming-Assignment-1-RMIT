@@ -22,7 +22,7 @@ public class dependent extends customer implements Id_generate, From_String {
     public dependent() {
     }
 
-    public dependent(String id, String fullName, int insuranceCard, List<String> claims, String policyHolder) {
+    public dependent(String id, String fullName, String insuranceCard, List<String> claims, String policyHolder) {
         super(id, fullName, insuranceCard, claims);
         this.policyHolder = policyHolder;
     }
@@ -101,14 +101,14 @@ public class dependent extends customer implements Id_generate, From_String {
         return String.format("C-%07d", lastAssignedId);
     }
 
-    //  CRU overriden methods for dependent
+    //  CRU override methods for dependent
 
     @Override
     public void create_customer(Scanner scanner) {
         System.out.println("Enter the full name of the dependent: ");
         String fullName = scanner.nextLine();
 
-        int insuranceCard = 0;
+        String insuranceCard = String.valueOf(0);
 
         List<String> claims = new ArrayList<>();
         System.out.println("Enter the claims of the dependent (separated by comma): ");
@@ -145,7 +145,7 @@ public class dependent extends customer implements Id_generate, From_String {
             String insuranceCardInput = scanner.nextLine();
             if (!insuranceCardInput.isEmpty()) {
                 int insuranceCard = Integer.parseInt(insuranceCardInput);
-                dependentToUpdate.setInsuranceCard(insuranceCard);
+                dependentToUpdate.setInsuranceCard(String.valueOf(insuranceCard));
             }
 
             System.out.println("Enter the new claims of the dependent (separated by comma, or press Enter to skip): ");
@@ -193,7 +193,7 @@ public class dependent extends customer implements Id_generate, From_String {
 
         String id = parts[0].split("=")[1].replace("'", "");
         String fullName = parts[1].split("=")[1].replace("'", "");
-        int insuranceCard = Integer.parseInt(parts[2].split("=")[1]);
+        String insuranceCard = parts[2].split("=")[1];
 
         List<String> claims = new ArrayList<>();
         if (parts.length > 3 && !parts[3].split("=")[1].equals("[]")) {

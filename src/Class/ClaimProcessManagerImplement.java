@@ -20,7 +20,7 @@ public class ClaimProcessManagerImplement implements ClaimProcessManager{
         String insuredPerson = scanner.nextLine();
 
         System.out.println("Enter the insurance card number: ");
-        int insuranceCard = Integer.parseInt(scanner.nextLine());
+        String insuranceCard = scanner.nextLine();
 
         System.out.println("Enter the claim date (in format yyyy-mm-dd): ");
         String claimDateInput = scanner.nextLine();
@@ -76,7 +76,7 @@ public class ClaimProcessManagerImplement implements ClaimProcessManager{
         System.out.println("Enter the new insurance card number (or press Enter to skip): ");
         String insuranceCardInput = scanner.nextLine();
         if (!insuranceCardInput.isEmpty()) {
-            int insuranceCard = Integer.parseInt(insuranceCardInput);
+            String insuranceCard = insuranceCardInput;
             existingClaim.setInsuranceCard(insuranceCard);
         }
 

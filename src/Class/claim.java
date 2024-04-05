@@ -16,7 +16,7 @@ public class claim implements Id_generate, From_String {
     private String id;
     private Date ClaimDate;
     private String insuredPerson;
-    private int insuranceCard;
+    private String insuranceCard;
     private Date examDate;
     private List<String> documents;
     private double claimAmount;
@@ -32,7 +32,7 @@ public class claim implements Id_generate, From_String {
     public claim() {
     }
 
-    public claim(String id, Date claimDate, String insuredPerson, int insuranceCard, Date examDate, List<String> documents, double claimAmount, allStatus status, String bankingInfo) {
+    public claim(String id, Date claimDate, String insuredPerson, String insuranceCard, Date examDate, List<String> documents, double claimAmount, allStatus status, String bankingInfo) {
         this.id = id;
         ClaimDate = claimDate;
         this.insuredPerson = insuredPerson;
@@ -61,7 +61,7 @@ public class claim implements Id_generate, From_String {
         this.insuredPerson = insuredPerson;
     }
 
-    public void setInsuranceCard(int insuranceCard) {
+    public void setInsuranceCard(String insuranceCard) {
         this.insuranceCard = insuranceCard;
     }
 
@@ -165,7 +165,7 @@ public class claim implements Id_generate, From_String {
         }
 
         String insuredPerson = parts[2].split("=")[1].replace("'", "");
-        int insuranceCard = Integer.parseInt(parts[3].split("=")[1]);
+        String insuranceCard = parts[3].split("=")[1];
 
         Date examDate = null;
         try {

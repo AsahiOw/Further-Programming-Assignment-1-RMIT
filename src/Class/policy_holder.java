@@ -23,7 +23,7 @@ public class policy_holder extends customer implements Id_generate, From_String 
     public policy_holder() {
     }
 
-    public policy_holder(String id, String fullName, int insuranceCard, List<String> claims, List<String> dependents) {
+    public policy_holder(String id, String fullName, String insuranceCard, List<String> claims, List<String> dependents) {
         super(id, fullName, insuranceCard, claims);
         this.dependents = dependents;
     }
@@ -102,14 +102,14 @@ public class policy_holder extends customer implements Id_generate, From_String 
         return String.format("C-%07d", lastAssignedId);
     }
 
-    // CRU overriden methods for policyholder
+    // CRU override methods for policyholder
 
     @Override
     public void create_customer(Scanner scanner) {
         System.out.println("Enter the full name of the policy holder: ");
         String fullName = scanner.nextLine();
 
-        int insuranceCard = 0;
+        String insuranceCard = String.valueOf(0);
 
         List<String> claims = new ArrayList<>();
         System.out.println("Enter the claims of the policy holder (separated by comma): ");
@@ -152,7 +152,7 @@ public class policy_holder extends customer implements Id_generate, From_String 
             System.out.println("Enter the new insurance card number of the policy holder (or press Enter to skip): ");
             String insuranceCardInput = scanner.nextLine();
             if (!insuranceCardInput.isEmpty()) {
-                int insuranceCard = Integer.parseInt(insuranceCardInput);
+                String insuranceCard = insuranceCardInput;
                 policyHolderToUpdate.setInsuranceCard(insuranceCard);
             }
 
@@ -207,7 +207,7 @@ public class policy_holder extends customer implements Id_generate, From_String 
 
         String id = parts[0].split("=")[1].replace("'", "");
         String fullName = parts[1].split("=")[1].replace("'", "");
-        int insuranceCard = Integer.parseInt(parts[2].split("=")[1]);
+        String insuranceCard = parts[2].split("=")[1];
 
         List<String> claims = new ArrayList<>();
         if (parts.length > 3 && !parts[3].split("=")[1].equals("[]")) {
